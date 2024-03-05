@@ -1,0 +1,55 @@
+﻿@page "/character-sheet-full"
+
+<PageTitle>@(Character.Name)'s Character Sheet - The Black Tower</PageTitle>
+
+<div class="sheet-header">
+	<div class="character-name">@Character.Name</div>
+	<div class="character-pronouns">
+		@Character.Pronouns.Subject<br/>@Character.Pronouns.Object
+	</div>
+	<div class="flex-spacer"/>
+	<div class="player">
+		<div class="label">Played by</div>
+		<div class="value">@Character.PlayerName</div>
+	</div>
+	<button class="edit-button">Edit</button>
+</div>
+
+<div class="character-attribute-list">
+	<div>
+		Species:<br/>
+		Player:<br/>
+		Runs Won / Played:<br/>
+		Total Levels Gained:<br/>
+	</div>
+	<div>
+		@Character.Species<br/>
+		@Character.PlayerName<br/>
+		@Character.RunsWon / @Character.RunsPlayed<br/>
+		@Character.TotalLevelsGained<br/>
+	</div>
+</div>
+
+<h5>Stats:</h5>
+<div class="character-attribute-list">
+	<div>
+		Max HP:<br/>
+		Max MP:<br/>
+		Strength:<br/>
+		Arcana:<br/>
+		Fortitude:<br/>
+		Resilience:<br/>
+	</div>
+	<div>
+		@Character.MaxHP<br/>
+		@Character.MaxMP<br/>
+		@Character.Strength<br/>
+		@Character.Arcana<br/>
+		@Character.Fortitude<br/>
+		@Character.Resilience<br/>
+	</div>
+</div>
+
+@code {
+	public Character Character { get; set; } = Character.DefaultCharacter;
+}

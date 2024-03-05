@@ -1,0 +1,31 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @BlackTower.Counter.CurrentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+	public Counter()
+	{
+		BlackTower.Counter.CountUpdated += CounterUpdated;
+	}
+
+	~Counter()
+	{
+		BlackTower.Counter.CountUpdated -= CounterUpdated;
+	}
+
+	private void CounterUpdated(object? sender, EventArgs args)
+	{
+		InvokeAsync(StateHasChanged);
+	}
+
+	private void IncrementCount()
+    {
+	    BlackTower.Counter.CurrentCount++;
+    }
+}
