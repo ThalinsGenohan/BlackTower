@@ -1,56 +1,123 @@
-﻿body { }
+﻿html, body {
+	background-color: darkgrey;
+	font-family: 'wondermail';
+	height: 100%;
+	margin: 0;
+}
 
-.sheet-header {
-	align-items: center;
+* { box-sizing: border-box; }
+
+.page-body {
+	background-color: black;
+	height: 100%;
+	margin: auto;
+	max-width: 800px;
+	padding: 30px;
+	width: 100%;
+}
+
+.box {
+	background-image: linear-gradient(to top left, black -100%, purple);
+	padding: 10px;
+	width: 100%;
+}
+
+.row {
 	display: flex;
 	flex-direction: row;
-	position: relative;
-	white-space: nowrap;
+	gap: 10px;
+	justify-content: space-between;
+	align-items: flex-start;
+	width: 100%;
 }
 
-.character-name {
-	font-size: 2.5rem;
+.column {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	/*gap: 4px;*/
+	width: 100%;
 }
 
-.character-pronouns {
-	color: gray;
-	font-size: 0.9rem;
-	line-height: 1.1;
-	margin-left: 1rem;
+.even { justify-content: space-evenly; }
+
+.tight { justify-content: center; }
+
+.left { align-items: flex-start; }
+
+.spacer { flex-grow: 1; }
+
+.row > .divider {
+	background-color: lime; /* fallback */
+	background-color: rgba(255, 255, 255, 0.50);
+	height: 90%;
+	width: 1px;
+}
+
+.column > .divider {
+	background-color: lime;
+	background-color: rgba(255, 255, 255, 0.50);
+	height: 1px;
+	width: 90%;
+}
+
+.divider:first-child, .divider:last-child { background: none; }
+
+.sheet-meta { padding: 10px; }
+
+.sheet-body {
+	background-color: lightgray;
+	border-radius: 5px;
+	color: white;
+	padding: 5px;
+	width: 100%;
+}
+
+.name {
+	font-size: 1.5rem;
+	margin-top: -5px;
 	text-align: left;
 }
 
-.flex-spacer {
-	flex-basis: 0;
-	flex-grow: 1;
-}
+.character-image { width: 100%; }
 
-.player {
-	margin-right: 1rem;
-	line-height: 1.1rem;
-	height: fit-content;
-}
-
-.player .label {
-	color: gray;
-	font-size: 0.9rem;
-}
-
-.player .value {
-	font-size: 1.5rem;
-}
-
-.edit-button {
-	height: 1.75rem;
+.image-placeholder {
+	aspect-ratio: 1;
+	background: lightgrey;
+	color: grey;
+	height: 100px;
 	text-align: center;
 }
 
-.character-attribute-list {
-	background-color: #bfbfbf;
-	display: flex;
+.stats {
+	background-color: #585858;
+	border-radius: 10px;
+	gap: 0px;
+	padding: 10px 0;
 }
 
-.character-attribute-list > :first-child {
-	margin-right: 0.5rem;
-	text-align: right;
+.stat {
+	color: lightgrey;
+	text-align: center;
+	width: 25%;
 }
+
+.green { color: #22da09; }
+
+.cyan { color: #06c8c1; }
+
+.orange { color: #e3870f; }
+
+.blue { color: #009dff; }
+
+.red { color: #f25a5a; }
+
+.purple { color: #a97bff; }
+
+.stat-value { font-size: 1.5rem; }
+
+.stat-value.positive { color: lightgreen; }
+
+.stat-value.negative { color: lightcoral; }
+
+.stat-name { font-size: 0.64rem; }

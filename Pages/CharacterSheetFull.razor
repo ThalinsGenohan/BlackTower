@@ -2,54 +2,123 @@
 
 <PageTitle>@(Character.Name)'s Character Sheet - The Black Tower</PageTitle>
 
-<div class="sheet-header">
-	<div class="character-name">@Character.Name</div>
-	<div class="character-pronouns">
-		@Character.Pronouns.Subject<br/>@Character.Pronouns.Object
+<div class="page-body">
+	<div class="sheet-meta row">
+		<div class="spacer"></div>
+		<button class="edit">edit</button>
 	</div>
-	<div class="flex-spacer"/>
-	<div class="player">
-		<div class="label">Played by</div>
-		<div class="value">@Character.PlayerName</div>
-	</div>
-	<button class="edit-button">Edit</button>
-</div>
+	<div class="sheet-body row">
 
-<div class="character-attribute-list">
-	<div>
-		Species:<br/>
-		Player:<br/>
-		Runs Won / Played:<br/>
-		Total Levels Gained:<br/>
-	</div>
-	<div>
-		@Character.Species<br/>
-		@Character.PlayerName<br/>
-		@Character.RunsWon / @Character.RunsPlayed<br/>
-		@Character.TotalLevelsGained<br/>
-	</div>
-</div>
+		<div class="character-info column box">
+			<div class="row">
+				<div class="image-placeholder">
+					image
+				</div>
+				<div class="column left tight">
+					<div class="name">@Character.Name</div>
+					<div class="row">
+						<div class="pronouns">@(Character.Pronouns.Subject)/@(Character.Pronouns.Object)</div>
+						<div class="species">@Character.Species</div>
+					</div>
+					<div class="player-name">Played by @Character.PlayerName</div>
+					<div class="run-stats row">
+						<span>Played: X</span>
+						<span>Won: X</span>
+					</div>
+				</div>
+			</div>
+			<div class="divider"></div>
 
-<h5>Stats:</h5>
-<div class="character-attribute-list">
-	<div>
-		Max HP:<br/>
-		Max MP:<br/>
-		Strength:<br/>
-		Arcana:<br/>
-		Fortitude:<br/>
-		Resilience:<br/>
-	</div>
-	<div>
-		@Character.MaxHP<br/>
-		@Character.MaxMP<br/>
-		@Character.Strength<br/>
-		@Character.Arcana<br/>
-		@Character.Fortitude<br/>
-		@Character.Resilience<br/>
+
+			<div class="bio">
+				@Character.Biography
+			</div>
+			<div class="stats row even">
+				<div class="divider"></div>
+				<div class="stat green">
+					<div class="stat-value">@Character.MaxHP</div>
+					<div class="stat-name">Max @Character.HPString</div>
+				</div>
+				<div class="divider"></div>
+				<div class="stat cyan">
+					<div class="stat-value">@Character.MaxMP</div>
+					<div class="stat-name">Max @Character.MPString</div>
+				</div>
+				<div class="divider"></div>
+				<div class="stat orange">
+					<div class="stat-value">@Character.Strength</div>
+					<div class="stat-name">@Character.AttackString</div>
+				</div>
+				<div class="divider"></div>
+				<div class="stat blue">
+					<div class="stat-value">@Character.Arcana</div>
+					<div class="stat-name">@Character.MagicString</div>
+				</div>
+				<div class="divider"></div>
+				<div class="stat red">
+					<div class="stat-value">@Character.Fortitude</div>
+					<div class="stat-name">@Character.PhysicalDefenseString</div>
+				</div>
+				<div class="divider"></div>
+				<div class="stat purple">
+					<div class="stat-value">@Character.Resilience</div>
+					<div class="stat-name">@Character.ElementalDefenseString</div>
+				</div>
+				<div class="divider"></div>
+			</div>
+		</div>
+		<div class="column">
+			<div class="column class box">
+				<div class="name">@Character.SpecialtyClass.Name</div>
+				<div class="divider"></div>
+				<div class="class-description">@Character.SpecialtyClass.Description</div>
+				<div class="stats row even">
+					<div class="divider"></div>
+					<div class="stat">
+						<div class="stat-value @ClassHP">@Character.SpecialtyClass.BaseHP.ToString("+#;-#;0")</div>
+						<div class="stat-name green">Max @Character.HPString</div>
+					</div>
+					<div class="divider"></div>
+					<div class="stat">
+						<div class="stat-value @ClassMP">@Character.SpecialtyClass.BaseMP.ToString("+#;-#;0")</div>
+						<div class="stat-name cyan">Max @Character.MPString</div>
+					</div>
+					<div class="divider"></div>
+					<div class="stat">
+						<div class="stat-value @ClassATK">@Character.SpecialtyClass.BaseStrength.ToString("+#;-#;0")</div>
+						<div class="stat-name orange">@Character.AttackString</div>
+					</div>
+					<div class="divider"></div>
+					<div class="stat">
+						<div class="stat-value @ClassMAG">@Character.SpecialtyClass.BaseArcana.ToString("+#;-#;0")</div>
+						<div class="stat-name blue">@Character.MagicString</div>
+					</div>
+					<div class="divider"></div>
+					<div class="stat">
+						<div class="stat-value @ClassPDF">@Character.SpecialtyClass.BaseFortitude.ToString("+#;-#;0")</div>
+						<div class="stat-name red">@Character.PhysicalDefenseString</div>
+					</div>
+					<div class="divider"></div>
+					<div class="stat">
+						<div class="stat-value @ClassEDF">@Character.SpecialtyClass.BaseResilience.ToString("+#;-#;0")</div>
+						<div class="stat-name purple">@Character.ElementalDefenseString</div>
+					</div>
+					<div class="divider"></div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
 @code {
-	public Character Character { get; set; } = Character.DefaultCharacter;
+	public Character Character { get; set; } = Character.AlaynaExample;
+
+	public string ClassHP => Character.SpecialtyClass.BaseHP > 0 ? "positive" : Character.SpecialtyClass.BaseHP < 0 ? "negative" : "";
+	public string ClassMP => Character.SpecialtyClass.BaseMP > 0 ? "positive" : Character.SpecialtyClass.BaseMP < 0 ? "negative" : "";
+	public string ClassATK => Character.SpecialtyClass.BaseStrength > 0 ? "positive" : Character.SpecialtyClass.BaseStrength < 0 ? "negative" : "";
+	public string ClassMAG => Character.SpecialtyClass.BaseArcana > 0 ? "positive" : Character.SpecialtyClass.BaseArcana < 0 ? "negative" : "";
+	public string ClassPDF => Character.SpecialtyClass.BaseFortitude > 0 ? "positive" : Character.SpecialtyClass.BaseFortitude < 0 ? "negative" : "";
+	public string ClassEDF => Character.SpecialtyClass.BaseResilience > 0 ? "positive" : Character.SpecialtyClass.BaseResilience < 0 ? "negative" : "";
+
+	void Test() { }
 }

@@ -16,6 +16,13 @@ public class PronounList
 
 public class Character
 {
+	public const string HPString               = "HP";
+	public const string MPString               = "MP";
+	public const string AttackString           = "Attack";
+	public const string MagicString            = "Magic";
+	public const string PhysicalDefenseString  = "Phys. Def.";
+	public const string ElementalDefenseString = "Elem. Def.";
+
 	public const byte BaseHP         = 10;
 	public const byte BaseMP         = 10;
 	public const byte BaseStrength   = 5;
@@ -31,10 +38,38 @@ public class Character
 		PlayerName = "Player Name",
 	};
 
+	public static readonly Character AlaynaExample = new()
+	{
+		Name = "Ambi Sykhashar",
+		Pronouns = new PronounList
+		{
+			Subject           = "sy",
+			Object            = "syr",
+			PossessiveSubject = "syn",
+			PossessiveObject  = "synyr",
+			Reflexive         = "syrself",
+		},
+		Species    = "Dragon",
+		PlayerName = "Alayna",
+		Biography  = "there should be a description here, lorem ipsum, etc",
+		SpecialtyClass = new JobClass
+		{
+			Name           = "Vismaster",
+			Description    = "A master of energy magic. Capable of storing energy to release it in a different form.",
+			BaseHP         = 0,
+			BaseMP         = 20,
+			BaseStrength   = -3,
+			BaseArcana     = 5,
+			BaseFortitude  = -2,
+			BaseResilience = 3,
+		},
+	};
+
 	public string      Name       { get; set; } = "";
 	public PronounList Pronouns   { get; set; } = new();
 	public string      Species    { get; set; } = "";
 	public string      PlayerName { get; set; } = "";
+	public string      Biography  { get; set; } = "";
 
 	public ushort RunsWon           { get; set; } = 0;
 	public ushort RunsPlayed        { get; set; } = 0;
