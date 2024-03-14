@@ -5,6 +5,8 @@
 
 html, body {
     font-family: 'JetBrains Mono', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	padding: 0;
+	margin: 0;
 }
 
 h1:focus {

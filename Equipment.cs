@@ -8,20 +8,14 @@ public class Equipment
 	public sbyte HP         { get; set; } = 0;
 	public sbyte MP         { get; set; } = 0;
 	public sbyte Strength   { get; set; } = 0;
-	public sbyte Arcana     { get; set; } = 0;
-	public sbyte Fortitude  { get; set; } = 0;
-	public sbyte Resilience { get; set; } = 0;
+	public sbyte Magic      { get; set; } = 0;
+	public sbyte Defense    { get; set; } = 0;
+	public sbyte Resistance { get; set; } = 0;
 }
 
-public class Accessory : Equipment
-{
+public class Accessory : Equipment { }
 
-}
-
-public class Armor : Equipment
-{
-	public byte Defense { get; set; } = 0;
-}
+public class Armor : Equipment { }
 
 public class Weapon : Equipment
 {

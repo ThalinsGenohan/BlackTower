@@ -2,17 +2,15 @@
 
 public class JobClass
 {
-	public string Name         { get; set; } = "";
-	public string Description  { get; set; } = "";
-	public string ResourceName { get; set; } = "";
-	public byte   ResourceMax  { get; set; } = 0;
+	public string Name        { get; set; } = "";
+	public string Description { get; set; } = "";
 
 	public sbyte BaseHP         { get; set; } = 0;
 	public sbyte BaseMP         { get; set; } = 0;
 	public sbyte BaseStrength   { get; set; } = 0;
-	public sbyte BaseArcana     { get; set; } = 0;
-	public sbyte BaseFortitude  { get; set; } = 0;
-	public sbyte BaseResilience { get; set; } = 0;
+	public sbyte BaseMagic      { get; set; } = 0;
+	public sbyte BaseDefense    { get; set; } = 0;
+	public sbyte BaseResistance { get; set; } = 0;
 
 	public List<Skill> Skills { get; } = new();
 }

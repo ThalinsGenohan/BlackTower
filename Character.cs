@@ -16,19 +16,12 @@ public class PronounList
 
 public class Character
 {
-	public const string HPString               = "HP";
-	public const string MPString               = "MP";
-	public const string AttackString           = "Attack";
-	public const string MagicString            = "Magic";
-	public const string PhysicalDefenseString  = "Phys. Def.";
-	public const string ElementalDefenseString = "Elem. Def.";
-
 	public const byte BaseHP         = 10;
 	public const byte BaseMP         = 10;
 	public const byte BaseStrength   = 5;
-	public const byte BaseArcana     = 5;
-	public const byte BaseFortitude  = 5;
-	public const byte BaseResilience = 5;
+	public const byte BaseMagic      = 5;
+	public const byte BaseDefense    = 5;
+	public const byte BaseResistance = 5;
 
 	public static readonly Character DefaultCharacter = new()
 	{
@@ -51,7 +44,8 @@ public class Character
 		},
 		Species    = "Dragon",
 		PlayerName = "Alayna",
-		Biography  = "there should be a description here, lorem ipsum, etc",
+		Biography =
+			"A black and purple dragoness with golden eyes and steeped in the arcane arts. She entered the tower to study its enchantments and learn its secrets...",
 		SpecialtyClass = new JobClass
 		{
 			Name           = "Vismaster",
@@ -59,9 +53,9 @@ public class Character
 			BaseHP         = 0,
 			BaseMP         = 20,
 			BaseStrength   = -3,
-			BaseArcana     = 5,
-			BaseFortitude  = -2,
-			BaseResilience = 3,
+			BaseMagic      = 5,
+			BaseDefense    = -2,
+			BaseResistance = 3,
 		},
 	};
 
@@ -92,31 +86,29 @@ public class Character
 	public byte Strength =>
 		(byte)(BaseStrength + this.SpecialtyClass.BaseStrength + (this.EquippedClass?.BaseStrength ?? 0));
 
-	public byte Arcana => (byte)(BaseArcana + this.SpecialtyClass.BaseArcana + (this.EquippedClass?.BaseArcana ?? 0));
+	public byte Magic => (byte)(BaseMagic + this.SpecialtyClass.BaseMagic + (this.EquippedClass?.BaseMagic ?? 0));
 
-	public byte Fortitude =>
-		(byte)(BaseFortitude + this.SpecialtyClass.BaseFortitude + (this.EquippedClass?.BaseFortitude ?? 0));
+	public byte Defense =>
+		(byte)(BaseDefense + this.SpecialtyClass.BaseDefense + (this.EquippedClass?.BaseDefense ?? 0));
 
-	public byte Resilience =>
-		(byte)(BaseResilience + this.SpecialtyClass.BaseResilience + (this.EquippedClass?.BaseResilience ?? 0));
+	public byte Resistance =>
+		(byte)(BaseResistance + this.SpecialtyClass.BaseResistance + (this.EquippedClass?.BaseResistance ?? 0));
 }
 
 public class RunCharacter
 {
 	public Character Character { get; }
 
-	public byte   CurrentHP         { get; set; } = 0;
-	public byte   CurrentMP         { get; set; } = 0;
-	public byte   CurrentExp        { get; set; } = 0;
-	public byte   CurrentLevel      { get; set; } = 0;
-	public byte   HPBoosts          { get; set; } = 0;
-	public byte   MPBoosts          { get; set; } = 0;
-	public byte   StrengthBoosts    { get; set; } = 0;
-	public byte   ArcanaBoosts      { get; set; } = 0;
-	public byte   FortitudeBoosts   { get; set; } = 0;
-	public byte   ResilienceBoosts  { get; set; } = 0;
-	public ushort SpecialtyResource { get; set; } = 0;
-	public ushort EquippedResource  { get; set; } = 0;
+	public byte CurrentHP        { get; set; } = 0;
+	public byte CurrentMP        { get; set; } = 0;
+	public byte CurrentExp       { get; set; } = 0;
+	public byte CurrentLevel     { get; set; } = 0;
+	public byte HPBoosts         { get; set; } = 0;
+	public byte MPBoosts         { get; set; } = 0;
+	public byte StrengthBoosts   { get; set; } = 0;
+	public byte MagicBoosts      { get; set; } = 0;
+	public byte DefenseBoosts    { get; set; } = 0;
+	public byte ResistanceBoosts { get; set; } = 0;
 
 	public RunCharacter(Character character)
 	{
