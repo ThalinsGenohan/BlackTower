@@ -1,22 +1,24 @@
-﻿namespace BlackTower.Pages;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace BlackTower.Pages;
 
 public partial class CharacterSheetFull
 {
-	private const string HPString         = "HP";
-	private const string MPString         = "MP";
-	private const string StrengthString   = "STR";
-	private const string MagicString      = "MAG";
-	private const string DefenseString    = "DEF";
-	private const string ResistanceString = "RES";
+	private const string _hpString         = "HP";
+	private const string _mpString         = "MP";
+	private const string _strengthString   = "STR";
+	private const string _magicString      = "MAG";
+	private const string _defenseString    = "DEF";
+	private const string _resistanceString = "RES";
 
 	public Character Character { get; set; } = Character.AlaynaExample;
 
 	private string ClassHP  => GetSignClass(this.Character.SpecialtyClass.BaseHP);
 	private string ClassMP  => GetSignClass(this.Character.SpecialtyClass.BaseMP);
-	private string ClassSTR => GetSignClass(this.Character.SpecialtyClass.BaseStrength);
-	private string ClassMAG => GetSignClass(this.Character.SpecialtyClass.BaseMagic);
-	private string ClassDEF => GetSignClass(this.Character.SpecialtyClass.BaseDefense);
-	private string ClassRES => GetSignClass(this.Character.SpecialtyClass.BaseResistance);
+	private string ClassStr => GetSignClass(this.Character.SpecialtyClass.BaseStrength);
+	private string ClassMag => GetSignClass(this.Character.SpecialtyClass.BaseMagic);
+	private string ClassDef => GetSignClass(this.Character.SpecialtyClass.BaseDefense);
+	private string ClassRes => GetSignClass(this.Character.SpecialtyClass.BaseResistance);
 
 	private static string GetSignClass(sbyte value)
 	{

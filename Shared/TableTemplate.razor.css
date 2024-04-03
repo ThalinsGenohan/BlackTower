@@ -1,0 +1,10 @@
+﻿.table {
+	text-align: center;
+	width: 100%;
+}
+
+.table-content {
+	overflow: scroll;
+	height: 0;
+	min-height: 100%;
+}

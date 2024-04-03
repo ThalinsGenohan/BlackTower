@@ -1,5 +1,6 @@
 ﻿html, body {
 	background-color: darkgrey;
+	font-family: 'wondermail';
 	height: 100%;
 	margin: 0;
 }
@@ -18,11 +19,6 @@
 	background-image: linear-gradient(to top left, black -100%, purple);
 	padding: 10px;
 	width: 100%;
-	border-width: 5px;
-	border-color: white;
-	border-style: ridge;
-	border-radius: 5px;
-	border-collapse: collapse;
 }
 
 .row {
@@ -43,6 +39,8 @@
 
 .grid { display: grid; }
 
+.bordered { gap: 5px; }
+
 .even { justify-content: space-evenly; }
 
 .tight { justify-content: center; }
@@ -55,14 +53,14 @@
 
 .row > .divider {
 	background-color: lime; /* fallback */
-	background-color: white;
+	background-color: rgba(255, 255, 255, 0.50);
 	height: 90%;
 	width: 1px;
 }
 
 .column > .divider {
 	background-color: lime;
-	background-color: white;
+	background-color: rgba(255, 255, 255, 0.50);
 	height: 1px;
 	margin-bottom: 5px;
 	margin-top: 5px;
@@ -74,13 +72,13 @@
 .sheet-meta { padding: 10px; }
 
 .sheet-body {
-	background-color: black;
+	background-color: lightgray;
+	background-image: linear-gradient(to top left, lightgrey, white);
+	border-radius: 5px;
 	color: white;
-	/*gap: 5px;*/
-	/*padding: 5px;*/
+	gap: 5px;
+	padding: 5px;
 	width: 100%;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
 }
 
 .name {
@@ -100,10 +98,12 @@
 
 .stats {
 	display: grid;
-	gap: 0 33%;
+	gap: 0 5%;
 	grid-template-columns: 1fr 1fr;
-	width: 80%;
+	width: 100%;
 }
+
+.class > .stats { }
 
 .stat { white-space: pre; }
 
@@ -133,34 +133,4 @@
 	gap: 2px;
 }
 
-.skill-list {
-	height: 0;
-	min-height: 100%;
-}
-
-.skills {
-	overflow-y: scroll;
-}
-
-.skills-header {
-	font-size: 0.8rem;
-}
-
-.table-name {
-	width: 50%;
-	text-align: left;
-}
-
-.table-potency {
-	width: 25%;
-	text-align: right;
-}
-
-.table-mp {
-	width: 25%;
-	text-align: right;
-}
-
-th.table-name {
-	text-align: center;
-}
+.class { /*width: 50%;*/ }

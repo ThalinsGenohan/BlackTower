@@ -31,6 +31,14 @@ public class Character
 		PlayerName = "Player Name",
 	};
 
+	public static readonly Skill TestSkill = new()
+	{
+		Name        = "Test Skill",
+		Description = "This skill is a test",
+		MPCost      = 0,
+		TargetCount = 0,
+	};
+
 	public static readonly Character AlaynaExample = new()
 	{
 		Name = "Ambi Sykhashar",
@@ -56,6 +64,29 @@ public class Character
 			BaseMagic      = 5,
 			BaseDefense    = -2,
 			BaseResistance = 3,
+			Skills =
+			{
+				new Skill
+				{
+					Name        = "Store Energy",
+					Description = "Absorb energy from your surroundings, gaining +5 Stored Energy.",
+					MPCost      = 2,
+				},
+				new Skill
+				{
+					Name = "Transpose",
+					Description =
+						"Convert your own energy into Stored Energy, losing 10 MP, and gaining +10 Stored Energy.",
+					MPCost = 10,
+				},
+				new Skill
+				{
+					Name        = "Ignite",
+					Description = "Expend 5 Stored Energy all at once to spark a flame.",
+					MPCost      = 0,
+				},
+				TestSkill, TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,
+			},
 		},
 	};
 
