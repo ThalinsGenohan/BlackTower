@@ -2,6 +2,8 @@
 
 public class JobClass
 {
+	public static Dictionary<string, JobClass> Classes = new();
+
 	public string Name        { get; set; } = "";
 	public string Description { get; set; } = "";
 

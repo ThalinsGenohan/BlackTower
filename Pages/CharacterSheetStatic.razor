@@ -1,12 +1,12 @@
-﻿@page "/character-sheet-full"
+﻿@page "/character-sheet-static"
 
 <PageTitle>@(Character.Name)'s Character Sheet - The Black Tower</PageTitle>
 
 <div class="page-body">
-	<div class="sheet-meta row">
+	@* <div class="sheet-meta row">
 		<div class="spacer"></div>
 		<button class="edit">edit</button>
-	</div>
+	</div> *@
 	<div class="sheet-body">
 		<div class="column even">
 			<div class="column">
@@ -80,14 +80,18 @@
 			
 			<TableTemplate Items="Character.SpecialtyClass.Skills" Context="skill">
 				<TableHeader>
-					<th class="table-name center-text">Name</th>
-					<th class="table-potency">PWR</th>
-					<th class="table-mp">MP</th>
+					<div class="skills-header table-name center-text">Name</div>
+					<div class="skills-header table-potency">PWR</div>
+					<div class="skills-header table-mp">MP</div>
 				</TableHeader>
 				<RowTemplate>
-					<td class="table-name">@skill.Name</td>
-					<td class="table-potency">0</td>
-					<td class="table-mp">@skill.MPCost</td>
+					<input type="checkbox" class="hidden-check" id="@(Character.Name)_@(skill.Name)" />
+					<label class="table-name tooltip" for="@(Character.Name)_@skill.Name">@skill.Name</label>
+					<label class="table-potency tooltip" for="@(Character.Name)_@skill.Name">0</label>
+					<label class="table-mp tooltip" for="@(Character.Name)_@skill.Name">@skill.MPCost</label>
+					<div class="tooltip-contents">
+						@skill.Description
+					</div>
 				</RowTemplate>
 			</TableTemplate>
 		</div>

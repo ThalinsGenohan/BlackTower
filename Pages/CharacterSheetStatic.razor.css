@@ -10,7 +10,7 @@
 	background-color: black;
 	height: 100%;
 	margin: auto;
-	padding: 20px;
+	padding: 0 20px 20px 20px;
 	width: 720px;
 }
 
@@ -52,6 +52,10 @@
 .right { align-items: flex-end; }
 
 .spacer { flex-grow: 1; }
+
+.center-text {
+	text-align: center !important;
+}
 
 .row > .divider {
 	background-color: lime; /* fallback */
@@ -138,29 +142,65 @@
 	min-height: 100%;
 }
 
-.skills {
-	overflow-y: scroll;
+::deep .skill-list {
+	grid-template-columns: 50% 25% 25%;
 }
 
 .skills-header {
-	font-size: 0.8rem;
 }
 
 .table-name {
-	width: 50%;
 	text-align: left;
 }
 
 .table-potency {
-	width: 25%;
 	text-align: right;
 }
 
 .table-mp {
-	width: 25%;
 	text-align: right;
 }
 
 th.table-name {
 	text-align: center;
+}
+
+.tooltip ::after {
+	visibility: hidden;
+	z-index: 1;
+}
+.tooltip:hover ::after {
+	content: attr(tooltip);
+	visibility: visible;
+	position: absolute;
+}
+details, summary {
+	display: contents;
+}
+.tooltip-contents {
+	grid-column: 1 / -1;
+	height: 0;
+	overflow: hidden;
+	border: none;
+	margin-bottom: -2px;
+	padding-left: 1em;
+}
+.tooltip {
+	border-top: 1px transparent;
+	background-color: transparent;
+}
+.hidden-check:hover + .tooltip, .hidden-check:hover + .tooltip + .tooltip, .hidden-check:hover + .tooltip + .tooltip + .tooltip {
+	background-color: rgba(255, 255, 255, 0.5);
+}
+.hidden-check:checked + .tooltip, .hidden-check:checked + .tooltip + .tooltip, .hidden-check:checked + .tooltip + .tooltip + .tooltip {
+	border-top: 1px solid;
+}
+.hidden-check:checked + .tooltip + .tooltip + .tooltip + .tooltip-contents {
+	height: auto;
+	border-bottom: 1px solid;
+	margin-bottom: 0;
+}
+.hidden-check {
+	/*grid-column: 1 / -1;*/
+	display: none;
 }

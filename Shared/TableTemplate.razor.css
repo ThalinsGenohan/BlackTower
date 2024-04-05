@@ -1,10 +1,32 @@
 ﻿.table {
-	text-align: center;
+	gap: 2px;
+}
+
+.table-header {
+	display: grid;
+	grid-template-columns: inherit;
+	scrollbar-gutter: stable;
 	width: 100%;
+	overflow-y: auto;
+	scrollbar-color: transparent transparent;
+	scrollbar-width: thin;
+	height: 2rem;
+	font-weight: bold;
 }
 
 .table-content {
-	overflow: scroll;
-	height: 0;
-	min-height: 100%;
+	display: grid;
+	grid-template-columns: inherit;
+	grid-auto-rows: max-content;
+	overflow-y: scroll;
+	/*flex-grow: 1;*/
+	width: 100%;
+	gap: 2px 0;
+	scrollbar-width: thin;
+	scrollbar-color: purple transparent;
+	scrollbar-gutter: stable;
+	margin-right: -4px;
+	padding-right: 4px;
+
+	scroll-snap-type: y mandatory;
 }

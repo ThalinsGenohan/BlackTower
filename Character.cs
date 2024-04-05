@@ -85,7 +85,6 @@ public class Character
 					Description = "Expend 5 Stored Energy all at once to spark a flame.",
 					MPCost      = 0,
 				},
-				TestSkill, TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,TestSkill,
 			},
 		},
 	};
