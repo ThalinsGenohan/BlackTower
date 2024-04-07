@@ -2,99 +2,86 @@
 
 <PageTitle>@(Character.Name)'s Character Sheet - The Black Tower</PageTitle>
 
-<div class="page-body">
-	@* <div class="sheet-meta row">
-		<div class="spacer"></div>
-		<button class="edit">edit</button>
-	</div> *@
-	<div class="sheet-body">
-		<div class="column even">
-			<div class="column">
-				<div class="character-info column box">
+<div class="sheet-body">
+	<div class="column center">
+		<div class="box column center">
+			<div class="row">
+				<div class="image-placeholder">image</div>
+				<div class="column left">
+					<span class="name">@Character.Name</span>
 					<div class="row">
-						<div class="image-placeholder">
-							image
-						</div>
-						<div class="column left tight">
-							<div class="name">@Character.Name</div>
-							<div class="row">
-								<div class="pronouns">@(Character.Pronouns.Subject)/@(Character.Pronouns.Object)</div>
-								<div class="species">@Character.Species</div>
-							</div>
-							<div class="player-name">Played by @Character.PlayerName</div>
-							<div class="run-stats row">
-								<span>Played: @Character.RunsPlayed</span>
-								<span>Won: @Character.RunsWon</span>
-							</div>
-						</div>
+						<span>@(Character.Pronouns.Subject)/@(Character.Pronouns.Object)</span>
+						<span>@Character.Species</span>
 					</div>
-
-					<div class="divider"></div>
-
-					<div class="bio">
-						@Character.Biography
-					</div>
-				</div>
-				
-			</div>
-
-			<div class="column class box">
-				<div class="name">@Character.SpecialtyClass.Name</div>
-				<div class="divider"></div>
-				<div class="class-description">@Character.SpecialtyClass.Description</div>
-
-				<div class="divider"></div>
-
-				<div class="stats">
-					<div class="stat row green">
-						<span>&nbsp;@_hpString:</span>
-						<span class="@ClassHP">@Character.SpecialtyClass.BaseHP.ToString("+#;-#;±0")</span>
-					</div>
-					<div class="stat row cyan">
-						<span>&nbsp;@_mpString:</span>
-						<span class="@ClassMP">@Character.SpecialtyClass.BaseMP.ToString("+#;-#;±0")</span>
-					</div>
-					<div class="stat row orange">
-						<span>@_strengthString:</span>
-						<span class="@ClassStr">@Character.SpecialtyClass.BaseStrength.ToString("+#;-#;±0")</span>
-					</div>
-					<div class="stat row blue">
-						<span>@_magicString:</span>
-						<span class="@ClassMag">@Character.SpecialtyClass.BaseMagic.ToString("+#;-#;±0")</span>
-					</div>
-					<div class="stat row red">
-						<span>@_defenseString:</span>
-						<span class="@ClassDef">@Character.SpecialtyClass.BaseDefense.ToString("+#;-#;±0")</span>
-					</div>
-					<div class="stat row purple">
-						<span>@_resistanceString:</span>
-						<span class="@ClassRes">@Character.SpecialtyClass.BaseResistance.ToString("+#;-#;±0")</span>
+					<span>Played by @Character.PlayerName</span>
+					<div class="row">
+						<span>Played: @Character.RunsPlayed</span>
+						<span>Won: @Character.RunsWon</span>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="skill-list bordered box column">
-			<div class="name">@Character.SpecialtyClass.Name Skills</div>
 			<div class="divider"></div>
-			
-			<TableTemplate Items="Character.SpecialtyClass.Skills" Context="skill">
-				<TableHeader>
-					<div class="skills-header table-name center-text">Name</div>
-					<div class="skills-header table-potency">PWR</div>
-					<div class="skills-header table-mp">MP</div>
-				</TableHeader>
-				<RowTemplate>
-					<input type="checkbox" class="hidden-check" id="@(Character.Name)_@(skill.Name)" />
-					<label class="table-name tooltip" for="@(Character.Name)_@skill.Name">@skill.Name</label>
-					<label class="table-potency tooltip" for="@(Character.Name)_@skill.Name">0</label>
-					<label class="table-mp tooltip" for="@(Character.Name)_@skill.Name">@skill.MPCost</label>
-					<div class="tooltip-contents">
-						@skill.Description
-					</div>
-				</RowTemplate>
-			</TableTemplate>
+
+			<span>@Character.Biography</span>
 		</div>
 
+		<div class="box column center">
+			<span class="name">@Character.SpecialtyClass.Name</span>
+
+			<div class="divider"></div>
+
+			<span>@Character.SpecialtyClass.Description</span>
+
+			<div class="divider"></div>
+
+			<div class="stats">
+				<div class="stat row green">
+					<span>&nbsp;@_hpString:</span>
+					<span class="@ClassHP">@Character.SpecialtyClass.BaseHP.ToString("+#;-#;±0")</span>
+				</div>
+				<div class="stat row cyan">
+					<span>&nbsp;@_mpString:</span>
+					<span class="@ClassMP">@Character.SpecialtyClass.BaseMP.ToString("+#;-#;±0")</span>
+				</div>
+				<div class="stat row orange">
+					<span>@_strengthString:</span>
+					<span class="@ClassStr">@Character.SpecialtyClass.BaseStrength.ToString("+#;-#;±0")</span>
+				</div>
+				<div class="stat row blue">
+					<span>@_magicString:</span>
+					<span class="@ClassMag">@Character.SpecialtyClass.BaseMagic.ToString("+#;-#;±0")</span>
+				</div>
+				<div class="stat row red">
+					<span>@_defenseString:</span>
+					<span class="@ClassDef">@Character.SpecialtyClass.BaseDefense.ToString("+#;-#;±0")</span>
+				</div>
+				<div class="stat row purple">
+					<span>@_resistanceString:</span>
+					<span class="@ClassRes">@Character.SpecialtyClass.BaseResistance.ToString("+#;-#;±0")</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="skill-list box column center">
+		<span class="name">@Character.SpecialtyClass.Name Skills</span>
+
+		<div class="divider"></div>
+		
+		<TableTemplate Items="Character.SpecialtyClass.Skills" Context="skill">
+			<TableHeader>
+				<span class="center-text">Name</span>
+				<span class="right-text">PWR</span>
+				<span class="right-text">MP</span>
+			</TableHeader>
+			<RowTemplate>
+				<input type="checkbox" class="hidden-check" id="@(Character.Name)_@(skill.Name)" />
+				<label class="left-text dropdown" for="@(Character.Name)_@skill.Name">@skill.Name</label>
+				<label class="right-text dropdown" for="@(Character.Name)_@skill.Name">0</label>
+				<label class="right-text dropdown" for="@(Character.Name)_@skill.Name">@skill.MPCost</label>
+				<span class="dropdown-contents">@skill.Description</span>
+			</RowTemplate>
+		</TableTemplate>
 	</div>
 </div>
