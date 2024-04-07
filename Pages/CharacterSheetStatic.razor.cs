@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BlackTower.Pages;
 
@@ -12,15 +13,21 @@ public partial class CharacterSheetStatic
 	private const string _defenseString    = "DEF";
 	private const string _resistanceString = "RES";
 
-	[Parameter]
-	public string CharacterName
+	public CharacterSheetStatic()
 	{
-		get => _characterName;
-		set {
-			if (this._characterName == value) return;
+	}
 
+	[Parameter]
+	public string CharacterName	{
+		get => this._characterName;
+		init {
 			this._characterName = value;
-			this.Character = LoadCharacter(this._characterName) ?? Character.DefaultCharacter;
+			AssetManager.GetCharacter(this.CharacterName).ContinueWith((c) => {
+				if (c.Result == null) return;
+
+				this.Character = c.Result;
+				InvokeAsync(StateHasChanged);
+			});
 		}
 	}
 	public Character Character { get; private set; } = Character.DefaultCharacter;
@@ -57,13 +64,5 @@ public partial class CharacterSheetStatic
 		string totalStr = $"={totalStat}";
 
 		return $"{baseStat,2}{classStr,4}{totalStr,4}";
-	}
-
-	private static Character? LoadCharacter(string name)
-	{
-		Character? character = JsonConvert.DeserializeObject<Character>(File.ReadAllText($"Data/Characters/{name}.json"));
-		if (character != null)
-			JobClass.Classes[character.SpecialtyClass.Name.ToLower()] = character.SpecialtyClass;
-		return character;
 	}
 }
