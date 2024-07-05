@@ -94,6 +94,7 @@ public class Character
 	public string      Species    { get; set; } = "";
 	public string      PlayerName { get; set; } = "";
 	public string      Biography  { get; set; } = "";
+	public string      ImagePath  { get; set; } = "";
 
 	public ushort RunsWon           { get; set; } = 0;
 	public ushort RunsPlayed        { get; set; } = 0;

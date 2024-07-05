@@ -1,19 +1,42 @@
 ﻿.sheet-body {
 	background-color: transparent;
-	width: 720px;
+	width: 850px;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 3fr 2fr;
+	grid-template-areas:
+		"bio skill-list"
+		"class skill-list";
 	padding: 0 20px 20px 20px;
+	gap: 6px;
 }
 
-.name { font-size: 1.5rem; }
+.bio {
+	grid-area: bio;
+}
+
+.class {
+	grid-area: class;
+}
+
+.name {
+	font-size: 150%;
+}
+.pronouns { margin-top: auto;
+			margin-bottom: auto;
+}
 
 .image-placeholder {
 	aspect-ratio: 1;
 	background: lightgrey;
 	color: grey;
-	height: 100px;
+	height: 128px;
 	text-align: center;
+	border: 2px solid white;
+	border-radius: 4px;
+}
+.image {
+	aspect-ratio: 1;
+	height: 128px;
 }
 
 .stats {
@@ -37,12 +60,13 @@
 .zero { color: grey; }
 
 .skill-list {
-	height: 0;
-	min-height: 100%;
+	grid-area: skill-list;
+	/*height: 0;
+	min-height: 100%;*/
 }
 
 ::deep .skill-list {
-	grid-template-columns: 50% 25% 25%;
+	grid-template-columns: 2fr 1fr 1fr;
 }
 
 .dropdown-contents {

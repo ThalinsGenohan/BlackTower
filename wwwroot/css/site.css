@@ -1,8 +1,12 @@
-@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
+@font-face {
+	font-family: 'DragonOracle';
+	src: url("/assets/fonts/DragonOracle.ttf");
+}
+
 html, body {
-	font-family: 'JetBrains Mono', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: 'DragonOracle', 'JetBrains Mono', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	padding: 0;
 	margin: 0;
 }

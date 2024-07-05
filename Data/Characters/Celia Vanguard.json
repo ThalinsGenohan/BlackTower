@@ -10,6 +10,7 @@
 	"species": "Human",
 	"playerName": "AmberKat",
 	"biography": "Trained and conditioned from childhood as a government assassin, Celia is a highly skilled fighter, and possessed of a cold and brusque nature. A few years ago she mustered the courage to defect, and currently moonlights as a freedom fighter. Rarely shows her face in order to conceal her identity.",
+	"imagePath": "/assets/images/celia.jpg",
 	"runsWon": 0,
 	"runsPlayed": 0,
 	"specialtyClass": {

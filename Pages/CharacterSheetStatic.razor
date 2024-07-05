@@ -3,63 +3,65 @@
 <PageTitle>@(Character.Name)'s Character Sheet - The Black Tower</PageTitle>
 
 <div class="sheet-body">
-	<div class="column center">
-		<div class="box column center">
-			<div class="row">
-				<div class="image-placeholder">image</div>
-				<div class="column left">
+	<div class="bio box center">
+		<div class="row">
+			<div class="image-placeholder">
+				<img class="image" src="@Character.ImagePath" alt="@Character.Name"/>
+			</div>
+			<div class="column left">
+				<div class="row">
 					<span class="name">@Character.Name</span>
-					<div class="row">
-						<span>@(Character.Pronouns.Subject)/@(Character.Pronouns.Object)</span>
-						<span>@Character.Species</span>
-					</div>
+					<span class="pronouns">@(Character.Pronouns.Subject)/@(Character.Pronouns.Object)</span>
+				</div>
+				<div class="row">
 					<span>Played by @Character.PlayerName</span>
-					<div class="row">
-						<span>Played: @Character.RunsPlayed</span>
-						<span>Won: @Character.RunsWon</span>
-					</div>
+					<span>@Character.Species</span>
+				</div>
+				<div class="row">
+					<span>Played: @Character.RunsPlayed</span>
+					<span>Won: @Character.RunsWon</span>
 				</div>
 			</div>
-
-			<div class="divider"></div>
-
-			<span>@Character.Biography</span>
 		</div>
 
-		<div class="box column center">
-			<span class="name">@Character.SpecialtyClass.Name</span>
+		<div class="hori-divider"></div>
 
-			<div class="divider"></div>
+		<span>@Character.Biography</span>
+	</div>
 
-			<span>@Character.SpecialtyClass.Description</span>
+	<div class="class box">
+		<div class="name center-text">@Character.SpecialtyClass.Name</div>
 
-			<div class="divider"></div>
+		<div class="hori-divider"></div>
 
-			<div class="stats">
-				<div class="stat row green">
-					<span>&nbsp;@_hpString:</span>
-					<span class="@ClassHP">@Character.SpecialtyClass.BaseHP.ToString("+#;-#;±0")</span>
-				</div>
-				<div class="stat row cyan">
-					<span>&nbsp;@_mpString:</span>
-					<span class="@ClassMP">@Character.SpecialtyClass.BaseMP.ToString("+#;-#;±0")</span>
-				</div>
-				<div class="stat row orange">
-					<span>@_strengthString:</span>
-					<span class="@ClassStr">@Character.SpecialtyClass.BaseStrength.ToString("+#;-#;±0")</span>
-				</div>
-				<div class="stat row blue">
-					<span>@_magicString:</span>
-					<span class="@ClassMag">@Character.SpecialtyClass.BaseMagic.ToString("+#;-#;±0")</span>
-				</div>
-				<div class="stat row red">
-					<span>@_defenseString:</span>
-					<span class="@ClassDef">@Character.SpecialtyClass.BaseDefense.ToString("+#;-#;±0")</span>
-				</div>
-				<div class="stat row purple">
-					<span>@_resistanceString:</span>
-					<span class="@ClassRes">@Character.SpecialtyClass.BaseResistance.ToString("+#;-#;±0")</span>
-				</div>
+		<span>@Character.SpecialtyClass.Description</span>
+
+		<div class="hori-divider"></div>
+
+		<div class="stats center">
+			<div class="stat row green">
+				<span>@_hpString:</span>
+				<span class="@ClassHP">@Character.SpecialtyClass.BaseHP.ToString("+#;-#;±0")</span>
+			</div>
+			<div class="stat row cyan">
+				<span>@_mpString:</span>
+				<span class="@ClassMP">@Character.SpecialtyClass.BaseMP.ToString("+#;-#;±0")</span>
+			</div>
+			<div class="stat row orange">
+				<span>@_strengthString:</span>
+				<span class="@ClassStr">@Character.SpecialtyClass.BaseStrength.ToString("+#;-#;±0")</span>
+			</div>
+			<div class="stat row blue">
+				<span>@_magicString:</span>
+				<span class="@ClassMag">@Character.SpecialtyClass.BaseMagic.ToString("+#;-#;±0")</span>
+			</div>
+			<div class="stat row red">
+				<span>@_defenseString:</span>
+				<span class="@ClassDef">@Character.SpecialtyClass.BaseDefense.ToString("+#;-#;±0")</span>
+			</div>
+			<div class="stat row purple">
+				<span>@_resistanceString:</span>
+				<span class="@ClassRes">@Character.SpecialtyClass.BaseResistance.ToString("+#;-#;±0")</span>
 			</div>
 		</div>
 	</div>
@@ -67,7 +69,7 @@
 	<div class="skill-list box column center">
 		<span class="name">@Character.SpecialtyClass.Name Skills</span>
 
-		<div class="divider"></div>
+		<div class="hori-divider"></div>
 		
 		<TableTemplate Items="Character.SpecialtyClass.Skills" Context="skill">
 			<TableHeader>

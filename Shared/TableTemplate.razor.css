@@ -11,7 +11,7 @@
 	scrollbar-color: transparent transparent;
 	scrollbar-width: thin;
 	height: 2rem;
-	font-weight: bold;
+	text-decoration: underline;
 }
 
 .table-content {
