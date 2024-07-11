@@ -1,8 +1,10 @@
 ﻿:root {
 	--box-opacity: 0.7;
 	--fallback-color: lime;
-	--main-color: rgba(128, 0, 128, var(--box-opacity));
+	--main-color: rgba(128, 0, 128, 1.0);
+	--main-color-trans: rgba(128, 0, 128, var(--box-opacity));
 	--accent-color: #ffdf00;
+	--accent-color-trans: rgba(255, 223, 0, var(--box-opacity));
 	--shadow-color: black;
 	--text-color: white;
 }
@@ -67,7 +69,7 @@ h1 {
 
 .box {
 	/*background-color: var(--fallback-color);*/
-	background-image: linear-gradient(to top left, rgba(0, 0, 0, var(--box-opacity)) -100%, var(--main-color));
+	background-image: linear-gradient(to top left, rgba(0, 0, 0, var(--box-opacity)) -100%, var(--main-color-trans));
 	padding: 8px 8px;
 	color: var(--text-color);
 	text-shadow: 0.0625em 0.0625em var(--shadow-color);
@@ -76,6 +78,7 @@ h1 {
 	border-image: url("/assets/textures/border.png") 9;
 	border-width: 9px;
 	border-radius: 6px;
+	box-sizing: border-box;
 }
 
 .row {

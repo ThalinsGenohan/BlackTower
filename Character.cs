@@ -106,24 +106,6 @@ public class Character
 	public Accessory? Accessory      { get; set; } = null;
 
 	public JobClass  SpecialtyClass { get; set; } = new();
-	public JobClass? EquippedClass  { get; set; } = null;
-
-	public byte MaxHP => (byte)(BaseHP + this.SpecialtyClass.BaseHP + (this.EquippedClass?.BaseHP ?? 0) +
-	                            (this.MainHandWeapon?.HP ?? 0) + (this.OffHandWeapon?.HP ?? 0) + (this.Armor?.HP ?? 0) +
-	                            (this.Accessory?.HP ?? 0));
-
-	public byte MaxMP => (byte)(BaseMP + this.SpecialtyClass.BaseMP + (this.EquippedClass?.BaseMP ?? 0));
-
-	public byte Strength =>
-		(byte)(BaseStrength + this.SpecialtyClass.BaseStrength + (this.EquippedClass?.BaseStrength ?? 0));
-
-	public byte Magic => (byte)(BaseMagic + this.SpecialtyClass.BaseMagic + (this.EquippedClass?.BaseMagic ?? 0));
-
-	public byte Defense =>
-		(byte)(BaseDefense + this.SpecialtyClass.BaseDefense + (this.EquippedClass?.BaseDefense ?? 0));
-
-	public byte Resistance =>
-		(byte)(BaseResistance + this.SpecialtyClass.BaseResistance + (this.EquippedClass?.BaseResistance ?? 0));
 }
 
 public class RunCharacter

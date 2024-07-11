@@ -12,6 +12,7 @@
 
 .bio {
 	grid-area: bio;
+	min-width: 100%;
 }
 
 .class {

@@ -1,0 +1,28 @@
+{
+	"name": "Lime",
+	"pronouns": {
+		"subject": "he",
+		"object": "him",
+		"possessiveSubject": "his",
+		"possessiveObject": "mis",
+		"reflexive": "himself"
+	},
+	"species": "Warforged",
+	"playerName": "Jaych",
+	"biography": "",
+	"imagePath": "",
+	"runsWon": 0,
+	"runsPlayed": 0,
+	"specialtyClass": {
+		"name": "",
+		"description": "",
+		"baseHP": 0,
+		"baseMP": 0,
+		"baseStrength": 0,
+		"baseMagic": 0,
+		"baseDefense": 0,
+		"baseResistance": 0,
+		"skills": [
+		]
+	}
+}
