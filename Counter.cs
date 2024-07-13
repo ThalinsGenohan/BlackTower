@@ -2,7 +2,7 @@
 
 public static class Counter
 {
-    public static event EventHandler CountUpdated;
+    public static event EventHandler? CountUpdated;
 
     public static int CurrentCount
     {

@@ -1,0 +1,38 @@
+﻿@page "/characters"
+<PageTitle>Black Tower Characters</PageTitle>
+
+@foreach (var c in _characters)
+{
+	<CharacterSheetStatic CharacterName="@c.Value.Name" />
+}
+
+@code {
+	private static Dictionary<string, Character> _characters = new();
+
+	public static event EventHandler? CharactersLoaded;
+
+	public Characters()
+	{
+		CharactersLoaded += LoadedCharacters;
+		this.LoadCharacters();
+	}
+
+	~Characters()
+	{
+		CharactersLoaded -= LoadedCharacters;
+	}
+
+	private void LoadedCharacters(object? sender, EventArgs args)
+	{
+		Console.WriteLine("Characters have been loaded!");
+		InvokeAsync(StateHasChanged);
+	}
+
+	private void LoadCharacters()
+	{
+		BlackTower.AssetManager.GetAllCharacters().ContinueWith((c) => {
+			_characters = c.Result;
+			CharactersLoaded?.Invoke(null, EventArgs.Empty);
+		});
+	}
+}

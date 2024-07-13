@@ -12,11 +12,15 @@
 	text-align: center;
 }
 
-a.navitem {
+.navitem ::deep a {
 	text-decoration: none;
 }
 
-.navitem:hover {
+navitem ::deep a.active {
+
+}
+
+navitem ::deep a:hover {
 	color: black;
 	text-shadow: none;
 	background-image: linear-gradient(to top left, rgba(0, 0, 0, var(--box-opacity)) -100%, var(--accent-color-trans));

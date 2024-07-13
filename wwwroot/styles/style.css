@@ -69,6 +69,7 @@ h1 {
 
 .box {
 	/*background-color: var(--fallback-color);*/
+	display: block;
 	background-image: linear-gradient(to top left, rgba(0, 0, 0, var(--box-opacity)) -100%, var(--main-color-trans));
 	padding: 8px 8px;
 	color: var(--text-color);

@@ -5,10 +5,20 @@ namespace BlackTower;
 
 public static class AssetManager
 {
+	private static bool _charactersLoaded = false;
 	private static Dictionary<string, Character> _characters = new();
+
+	public static async Task<Dictionary<string, Character>> GetAllCharacters()
+	{
+		await LoadAllCharacters();
+		return _characters;
+	}
 
 	public static async Task LoadAllCharacters()
 	{
+		if (_charactersLoaded)
+			return;
+
 		var files = Directory.GetFiles("Data/Characters/", "*.json");
 		if (files.Length == 0)
 			return;
@@ -17,7 +27,8 @@ public static class AssetManager
 		{
 			await LoadCharacter(file);
 		}
-	}	
+		_charactersLoaded = true;
+	}
 
 	public static async Task<Character?> GetCharacter(string characterName)
 	{
