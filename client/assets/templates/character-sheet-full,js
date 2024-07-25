@@ -1,0 +1,10 @@
+const socket = new WebSocket(window.URL.replace(/^https?/, "ws:"));
+socket.addEventListener("open", (event) => {
+    socket.send("blech");
+});
+
+socket.addEventListener("message", (event) => {
+    console.log("Message from server: ", event.data);
+});
+
+console.log("a");

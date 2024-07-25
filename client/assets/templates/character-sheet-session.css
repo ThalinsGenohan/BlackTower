@@ -1,0 +1,207 @@
+.sheet-body {
+    background-color: transparent;
+    width: 850px;
+    display: grid;
+    grid-template-columns: 3fr 3fr 4fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+        "bio bio skill-list-1"
+        "gems items skill-list-2";
+    padding: 0 0 16px 0;
+    gap: 5px;
+}
+
+.bio {
+    grid-area: bio;
+    min-width: 100%;
+}
+
+.gems {
+    grid-area: gems;
+}
+
+.items {
+    grid-area: items;
+}
+
+.skill-list-1 {
+    grid-area: skill-list-1;
+}
+.skill-list-2 {
+    grid-area: skill-list-2;
+}
+
+.name {
+    font-size: 150%;
+}
+
+.pronouns {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.image-placeholder {
+    aspect-ratio: 1;
+    background: lightgrey;
+    color: grey;
+    height: 128px;
+    text-align: center;
+    border: 2px solid white;
+    border-radius: 4px;
+}
+
+.image {
+    aspect-ratio: 1;
+    height: 128px;
+}
+
+.stats {
+    display: grid;
+    gap: 0 33%;
+    grid-template-columns: 1fr 1fr;
+    width: 80%;
+}
+
+.stat {
+    white-space: pre;
+}
+
+.green {
+    color: #22da09;
+}
+
+.cyan {
+    color: #06c8c1;
+}
+
+.orange {
+    color: #e3b70f;
+}
+
+.blue {
+    color: #009dff;
+}
+
+.red {
+    color: #f25a5a;
+}
+
+.purple {
+    color: #a97bff;
+}
+
+.positive {
+    color: lightgreen;
+}
+
+.negative {
+    color: lightcoral;
+}
+
+.zero {
+    color: grey;
+}
+
+.dropdown-contents {
+    grid-column: 1 / -1;
+    height: 0;
+    overflow: hidden;
+    border: none;
+    margin-bottom: -2px;
+    padding-left: 1em;
+}
+
+.dropdown {
+    border-top: 1px transparent;
+    background-color: transparent;
+}
+
+.hidden-check:hover + .dropdown,
+.hidden-check:hover + .dropdown + .dropdown,
+.hidden-check:hover + .dropdown + .dropdown + .dropdown {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.hidden-check:checked + .dropdown,
+.hidden-check:checked + .dropdown + .dropdown,
+.hidden-check:checked + .dropdown + .dropdown + .dropdown {
+    border-top: 1px solid;
+}
+
+.hidden-check:checked + .dropdown + .dropdown + .dropdown + .dropdown-contents {
+    height: auto;
+    border-bottom: 1px solid;
+    margin-bottom: 0;
+}
+
+.hidden-check {
+    display: none;
+}
+
+.table {
+    gap: 2px;
+    grid-template-columns: 2fr 1fr 1fr;
+    width: 100%;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: inherit;
+    scrollbar-gutter: stable;
+    width: 100%;
+    overflow-y: auto;
+    scrollbar-color: transparent transparent;
+    scrollbar-width: thin;
+    height: 2rem;
+    text-decoration: underline;
+}
+
+.table-content {
+    overflow-y: scroll;
+    width: 100%;
+    gap: 2px 0;
+    scrollbar-width: thin;
+    scrollbar-color: purple transparent;
+    scrollbar-gutter: stable;
+    margin-right: -4px;
+    padding-right: 4px;
+
+    scroll-snap-type: y mandatory;
+}
+
+.table-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-auto-rows: max-content;
+    width: 100%;
+    gap: 2px 0;
+    margin-right: -4px;
+    padding-right: 4px;
+}
+
+.bar-canvas {
+    width: 162px;
+    height: 32px;
+    image-rendering: pixelated;
+    vertical-align: center;
+}
+
+.gem-row {
+    margin-bottom: 4px;
+}
+
+.gem-slot {
+    width: 32px;
+    image-rendering: pixelated;
+    vertical-align: bottom;
+}
+
+.item {
+    margin-bottom: 8px;
+}
+
+.item-slot {
+    width: 32px;
+    image-rendering: pixelated;
+    vertical-align: bottom;
+}

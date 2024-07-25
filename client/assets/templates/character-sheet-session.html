@@ -1,0 +1,106 @@
+<div class="sheet-body">
+    <div class="bio box center">
+        <div class="row">
+            <div class="image-placeholder">
+                <img class="image" data-update="image" src="" alt="Loading..." />
+            </div>
+            <div class="column left">
+                <div class="row">
+                    <span class="name" data-update="name">Loading...</span>
+                    <span class="pronouns">
+                        <span data-update="pronouns-subject">they</span>/<span data-update="pronouns-object">them</span>
+                    </span>
+                </div>
+                <div class="row">
+                    <span data-update="player">someone</span>
+                    <span data-update="species">species</span>
+                </div>
+                <div class="row">
+                    <canvas class="bar-canvas" id="{cID}-hp-canvas"></canvas>
+                    <canvas class="bar-canvas" id="{cID}-mp-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats center">
+            <div class="stat row orange">
+                <span>STR:</span>
+                <span class="classStr" data-update="strength" data-stat="relative">X</span>
+            </div>
+            <div class="stat row blue">
+                <span>MAG:</span>
+                <span class="classMag" data-update="magic" data-stat="relative">X</span>
+            </div>
+            <div class="stat row red">
+                <span>DEF:</span>
+                <span class="classDef" data-update="defense" data-stat="relative">X</span>
+            </div>
+            <div class="stat row purple">
+                <span>RES:</span>
+                <span class="classRes" data-update="resistance" data-stat="relative">X</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="gems box">
+        <div class="gem-row">
+            <img class="gem-slot" id="gem-slot-1" src="/assets/images/gem-slot.png"></img>
+            <span id="gem-name-1">Empty</span>
+        </div>
+        <div class="gem-row">
+            <img class="gem-slot" id="gem-slot-2" src="/assets/images/gem-slot.png"></img>
+            <span id="gem-name-2">Empty</span>
+        </div>
+        <div class="gem-row">
+            <img class="gem-slot" id="gem-slot-3" src="/assets/images/gem-slot.png"></img>
+            <span id="gem-name-3">Empty</span>
+        </div>
+        <div class="gem-row">
+            <img class="gem-slot" id="gem-slot-4" src="/assets/images/gem-slot.png"></img>
+            <span id="gem-name-4">Empty</span>
+        </div>
+        <div class="gem-row">
+            <img class="gem-slot" id="gem-slot-5" src="/assets/images/gem-slot.png"></img>
+            <span id="gem-name-4">Empty</span>
+        </div>
+        <div class="gem-row">
+            <img class="gem-slot" id="gem-slot-6" src="/assets/images/gem-slot.png"></img>
+            <span id="gem-name-4">Empty</span>
+        </div>
+    </div>
+
+    <div class="items box">
+    </div>
+
+    <div class="skill-list-1 box column center">
+        <span class="skill-title name center-text"><span data-update="specialtyClass-name">Loading</span>
+            Skills</span>
+
+        <div class="hori-divider"></div>
+
+        <div class="table">
+            <div class="table-header">
+                <span class="center-text">Name</span>
+                <span class="right-text">PWR</span>
+                <span class="right-text">MP</span>
+            </div>
+            <div class="table-content" data-update="specialtyClass-skills"></div>
+        </div>
+    </div>
+
+    <div class="skill-list-2 box column center">
+        <span class="skill-title name center-text"><span data-update="specialtyClass-name">Loading</span>
+            Skills</span>
+
+        <div class="hori-divider"></div>
+
+        <div class="table">
+            <div class="table-header">
+                <span class="center-text">Name</span>
+                <span class="right-text">PWR</span>
+                <span class="right-text">MP</span>
+            </div>
+            <div class="table-content" data-update="specialtyClass-skills"></div>
+        </div>
+    </div>
+</div>
