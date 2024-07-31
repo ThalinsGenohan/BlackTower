@@ -29,7 +29,7 @@ function loadImage(path) {
 
 // Websocket
 
-const serverURL = `ws://${window.location.host}`;
+const serverURL = `wss://${window.location.host}`;
 
 const systemCategory = "sys";
 
