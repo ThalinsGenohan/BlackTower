@@ -198,8 +198,20 @@
     vertical-align: bottom;
 }
 
+.gems {
+    margin-top: 4px;
+    width: 134px;
+    height: 58px;
+    margin-bottom: auto;
+}
+
 .class-mech {
     width: 162px;
     height: 64px;
 }
 
+.buffs {
+    width: 144px;
+    height: 46px;
+    margin-top: 4px;
+}

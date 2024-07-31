@@ -39,4 +39,5 @@ class RunCharacter {
     currentHP;
     currentMP;
     equippedClass = null;
+    buffs = ["str-up", "mag-down"];
 }

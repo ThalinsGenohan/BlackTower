@@ -65,6 +65,7 @@ async function updateCharacter(c) {
     updateBar(cID, "mp", c.currentMP - 15, c.maxMP, 1);
     updateClassMechanic(cID, 1);
     updateClassMechanic(cID, 2);
+    updateBuffs(cID, c.buffs);
 
     fixCenterText();
 }
@@ -156,6 +157,28 @@ async function updateClassMechanic(cID, num) {
     await drawBar(ctx, 0, y, width, current, max, "#ffdf00", await loadImage(`/assets/textures/mp-label.png`));
     const numPos = { x: width - 45, y: y + 2 };
     writeSmall(ctx, numPos.x, numPos.y, `${' '.repeat(3 - current.toString().length)}${current}/${' '.repeat(3 - max.toString().length)}${max}`);
+}
+
+async function updateBuffs(cID, buffs) {
+    /** @type {HTMLCanvasElement} */
+    let canvas = document.getElementById(`${cID}-buffs-canvas`);
+    /** @type {CanvasRenderingContext2D} */
+    let ctx = canvas.getContext("2d");
+
+    const width = canvas.width = 72;
+    const height = canvas.height = 23;
+    ctx.clearRect(0, 0, width, height);
+    ctx.imageSmoothingEnabled = false;
+
+    let i = 1;
+    const y = 3;
+    let x = (width / 2) - (12 * buffs.length / 2);
+    for (let buff of buffs) {
+        ctx.drawImage(await loadImage(`/assets/images/buffs/${buff}.png`), x, y);
+        writeSmall(ctx, x + 3, y + (buff.match(/-down/) ? -3 : 13), i.toString());
+        x += 12;
+        i++;
+    }
 }
 
 connectToServer().then(() => {
