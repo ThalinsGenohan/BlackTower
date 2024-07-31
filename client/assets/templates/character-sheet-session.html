@@ -1,5 +1,5 @@
 <div class="sheet-body">
-    <div class="bio box center">
+    <div class="bio box center row">
         <div class="row">
             <div class="image-placeholder">
                 <img class="image" data-update="image" src="" alt="Loading..." />
@@ -16,31 +16,35 @@
                     <span data-update="species">species</span>
                 </div>
                 <div class="row">
-                    <canvas class="bar-canvas" id="{cID}-hp-canvas"></canvas>
-                    <canvas class="bar-canvas" id="{cID}-mp-canvas"></canvas>
+                    <div class="column">
+                        <canvas class="bar-canvas" id="{cID}-hp-canvas"></canvas>
+                        <div class="stats column">
+                            <div class="stat row orange">
+                                <span>Strength:</span>
+                                <span data-update="strength" data-stat="absolute">X</span>
+                            </div>
+                            <div class="stat row blue">
+                                <span>Magic:</span>
+                                <span data-update="magic" data-stat="absolute">X</span>
+                            </div>
+                            <div class="stat row red">
+                                <span>Defense:</span>
+                                <span data-update="defense" data-stat="absolute">X</span>
+                            </div>
+                            <div class="stat row purple">
+                                <span>Resistance:</span>
+                                <span data-update="resistance" data-stat="absolute">X</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <canvas class="bar-canvas" id="{cID}-mp-canvas"></canvas>
+                        <canvas class="class-mech" id="{cID}-class-mech-1"></canvas>
+                        <canvas class="class-mech" id="{cID}-class-mech-2"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="stats center">
-            <div class="stat row orange">
-                <span>STR:</span>
-                <span class="classStr" data-update="strength" data-stat="relative">X</span>
-            </div>
-            <div class="stat row blue">
-                <span>MAG:</span>
-                <span class="classMag" data-update="magic" data-stat="relative">X</span>
-            </div>
-            <div class="stat row red">
-                <span>DEF:</span>
-                <span class="classDef" data-update="defense" data-stat="relative">X</span>
-            </div>
-            <div class="stat row purple">
-                <span>RES:</span>
-                <span class="classRes" data-update="resistance" data-stat="relative">X</span>
-            </div>
-        </div>
-    </div>
 
     <div class="gems box">
         <div class="gem-row">

@@ -1,19 +1,15 @@
 .sheet-body {
     background-color: transparent;
-    width: 850px;
-    display: grid;
-    grid-template-columns: 3fr 3fr 4fr;
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas:
-        "bio bio skill-list-1"
-        "gems items skill-list-2";
+    width: 512px;
     padding: 0 0 16px 0;
-    gap: 5px;
+    gap: 4px;
+    
+    image-rendering: pixelated;
 }
 
 .bio {
     grid-area: bio;
-    min-width: 100%;
+    width: 512px;
 }
 
 .gems {
@@ -53,13 +49,11 @@
 .image {
     aspect-ratio: 1;
     height: 128px;
+    image-rendering: auto;
 }
 
 .stats {
-    display: grid;
-    gap: 0 33%;
-    grid-template-columns: 1fr 1fr;
-    width: 80%;
+    margin-right: 4px;
 }
 
 .stat {
@@ -180,9 +174,9 @@
 }
 
 .bar-canvas {
+    margin-top: 4px;
     width: 162px;
     height: 32px;
-    image-rendering: pixelated;
     vertical-align: center;
 }
 
@@ -192,7 +186,6 @@
 
 .gem-slot {
     width: 32px;
-    image-rendering: pixelated;
     vertical-align: bottom;
 }
 
@@ -202,6 +195,11 @@
 
 .item-slot {
     width: 32px;
-    image-rendering: pixelated;
     vertical-align: bottom;
 }
+
+.class-mech {
+    width: 162px;
+    height: 64px;
+}
+

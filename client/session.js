@@ -63,6 +63,9 @@ async function updateCharacter(c) {
     // TEMP
     updateBar(cID, "hp", c.currentHP - 5, c.maxHP, 2);
     updateBar(cID, "mp", c.currentMP - 15, c.maxMP, 1);
+    updateClassMechanic(cID, 1);
+    updateClassMechanic(cID, 2);
+
     fixCenterText();
 }
 
@@ -133,6 +136,26 @@ async function updateCharacterSkills(cID, data) {
             updateCharacterData(`${cID}-skills-${skillID}`, `skill-${key}`, skill[key]);
         }
     }
+}
+
+async function updateClassMechanic(cID, num) {
+    /** @type {HTMLCanvasElement} */
+    let canvas = document.getElementById(`${cID}-class-mech-${num}`);
+    /** @type {CanvasRenderingContext2D} */
+    let ctx = canvas.getContext("2d");
+
+    const width = canvas.width = 81;
+    const height = canvas.height = 32;
+    ctx.clearRect(0, 0, width, height);
+    ctx.imageSmoothingEnabled = false;
+
+    const current = 100;
+    const max = 100;
+    const y = 16;
+
+    await drawBar(ctx, 0, y, width, current, max, "#ffdf00", await loadImage(`/assets/textures/mp-label.png`));
+    const numPos = { x: width - 45, y: y + 2 };
+    writeSmall(ctx, numPos.x, numPos.y, `${' '.repeat(3 - current.toString().length)}${current}/${' '.repeat(3 - max.toString().length)}${max}`);
 }
 
 connectToServer().then(() => {
