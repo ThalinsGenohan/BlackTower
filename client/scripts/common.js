@@ -322,6 +322,7 @@ document.addEventListener('keydown', (event) => {
             keyBuffer = "";
             break;
         case "Enter":
+            console.log(`Sending command: '${keyBuffer}'`);
             sendMessage(systemCategory, "textcommand", { command: keyBuffer })
             bufferingCommand = false;
             keyBuffer = "";
@@ -333,5 +334,4 @@ document.addEventListener('keydown', (event) => {
             keyBuffer += event.key;
     }
     rainWidth = bufferingCommand ? 2 : 1;
-    console.log(keyBuffer);
 });
