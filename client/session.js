@@ -8,10 +8,6 @@ const skillEntryTemplate = fetch("/assets/templates/skill-list-entry.html")
 const characterCategory = "char";
 let characterCallbacks = {};
 
-function slugify(str) {
-    return str.replace(/\s/g, "");
-}
-
 async function addFullSheet(charID) {
     let template = await sheetTemplate;
     let element = document.createElement("div");
