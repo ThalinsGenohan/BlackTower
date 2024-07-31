@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 let connect = require('connect');
 let fs = require('fs').promises;
 let serveStatic = require('serve-static');
@@ -78,4 +80,4 @@ function handleFullCharacterRequest(ws, data) {
     ws.send(JSON.stringify({ type: "fullchar_ans" }));
 }
 
-server.listen(8080);
+server.listen(process.env.PORT);

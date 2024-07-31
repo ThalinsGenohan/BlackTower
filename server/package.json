@@ -1,16 +1,17 @@
 {
   "name": "blacktower",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "AmbiSykhar",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "connect": "^3.7.0",
     "csso": "^5.0.5",
+    "dotenv": "^16.4.5",
     "fs": "^0.0.1-security",
     "serve-static": "^1.15.0",
     "ws": "^8.18.0"
