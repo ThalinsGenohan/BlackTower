@@ -30,12 +30,6 @@ async function addSkillEntry(charID, skillID) {
 
 let characters = {};
 
-const barImages = {
-    "hp": loadImage('/assets/images/hp-bar.png'),
-    "mp": loadImage('/assets/images/mp-bar.png'),
-};
-const barFillTexture = loadImage('/assets/images/bar-fill.png');
-
 async function updateCharacter(c) {
     const cID = slugify(c.name);
     characters[cID] = c;
