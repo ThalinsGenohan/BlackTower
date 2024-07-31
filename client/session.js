@@ -90,7 +90,7 @@ async function updateBar(cID, bar, current, max, potionCount) {
 
     // draw the bar text
     const numPos = { x: width - 45, y: 2 };
-    writeSmall(ctx, numPos.x, numPos.y, `${current < 100 ? ' ' : ''}${current}/${max < 100 ? ' ' : ''}${max}`);
+    writeSmall(ctx, numPos.x, numPos.y, `${' '.repeat(3 - current.toString().length)}${current}/${' '.repeat(3 - max.toString().length)}${max}`);
 }
 
 function updateCharacterData(cID, key, data) {
