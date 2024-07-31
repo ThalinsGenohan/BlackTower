@@ -24,7 +24,7 @@ app.use(serveStatic("../client", { extensions: ['html'] }));
 
 let server = http.createServer(app);
 
-const wss = new WebSocketServer({ server: server });
+const wss = new WebSocketServer({ server: server, path: "/ws" });
 
 let characters = [];
 
