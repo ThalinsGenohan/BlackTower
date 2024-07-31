@@ -199,9 +199,8 @@ async function drawBar(ctx, x, y, width, fillValue, fillMax, fillColor, labelIma
     // draw the label
     ctx.drawImage(labelImage, borderSliceW.leftEdge + 1, 1);
 
-
     // Skew canvas
-    ctx.transform(1, 0, -1, 1, x - y, y);
+    ctx.transform(1, 0, -1, 1, 0, 0);
 
     // draw the bar fill
     const fillWidth = (blankWidth + 6) * (fillValue / fillMax);
