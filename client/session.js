@@ -81,14 +81,13 @@ async function updateBar(cID, bar, current, max, potionCount) {
     ctx.imageSmoothingEnabled = false;
 
     // resource bar
-    await drawBar(ctx, 0, 0, width, current, max, barColors[bar], await loadImage(`/assets/textures/${bar}-label.png`));
+    const numPos = { x: width - 45, y: 2 };
+    drawBar(ctx, 0, 0, width, current, max, barColors[bar], await loadImage(`/assets/textures/${bar}-label.png`)).then(() => {
+        writeSmall(ctx, numPos.x, numPos.y, `${' '.repeat(3 - current.toString().length)}${current}/${' '.repeat(3 - max.toString().length)}${max}`);
+    });
 
     // potion counter
-    await drawSegmentedBar(ctx, width - 8, 9, potionCount, 3, barColors[bar]);
-
-    // draw the bar text
-    const numPos = { x: width - 45, y: 2 };
-    writeSmall(ctx, numPos.x, numPos.y, `${' '.repeat(3 - current.toString().length)}${current}/${' '.repeat(3 - max.toString().length)}${max}`);
+    drawSegmentedBar(ctx, width - 8, 9, potionCount, 3, barColors[bar]);
 }
 
 function updateCharacterData(cID, key, data) {
@@ -148,9 +147,10 @@ async function updateClassMechanic(cID, num) {
     const max = 100;
     const y = 16;
 
-    await drawBar(ctx, 0, y, width, current, max, "#ffdf00", await loadImage(`/assets/textures/mp-label.png`));
     const numPos = { x: width - 45, y: y + 2 };
-    writeSmall(ctx, numPos.x, numPos.y, `${' '.repeat(3 - current.toString().length)}${current}/${' '.repeat(3 - max.toString().length)}${max}`);
+    drawBar(ctx, 0, y, width, current, max, "#ffdf00", await loadImage(`/assets/textures/mp-label.png`)).then(() => {
+        writeSmall(ctx, numPos.x, numPos.y, `${' '.repeat(3 - current.toString().length)}${current}/${' '.repeat(3 - max.toString().length)}${max}`);
+    });
 }
 
 async function updateBuffs(cID, buffs) {
