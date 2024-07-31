@@ -92,7 +92,9 @@ const smallFont = new Promise((resolve, reject) => {
 });
 const smallFontChars = {
     '/': 50,
-    ' ': 55,
+    '+': 55,
+    '-': 60,
+    '.': 65,
 }
 
 /**
