@@ -70,7 +70,7 @@ wss.on('connection', function connection(ws) {
 
     ws.on('message', function message(json) {
         let data = JSON.parse(json);
-        messageCallbacks[data.category][data.type](ws, data);
+        messageCallbacks?.[data.category]?.[data.type]?.(ws, data);
     });
 });
 
