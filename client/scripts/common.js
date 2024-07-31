@@ -40,6 +40,8 @@ let socket;
 
 let reconnectDelay = 1;
 
+const startTime = Date.now();
+
 function connectToServer() {
     return new Promise((resolve, reject) => {
         socket = new WebSocket(serverURL);
@@ -49,7 +51,7 @@ function connectToServer() {
         });
 
         socket.addEventListener("open", (event) => {
-            sendMessage(systemCategory, "connect", {});
+            sendMessage(systemCategory, "connect", { time: startTime });
             resolve(socket);
             reconnectDelay = 1;
         });
@@ -77,6 +79,9 @@ function sendMessage(category, type, data) {
 
 function handleSystemMessage(msg) {
     console.log("system message received");
+    if (msg.type == "refresh") {
+        window.location.reload();
+    }
 }
 messageCallbacks[systemCategory] = handleSystemMessage;
 

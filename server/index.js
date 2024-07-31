@@ -9,13 +9,14 @@ let { minify } = require('csso');
 
 let Character = require('./character.js');
 
+const startTime = Date.now();
+
 const app = connect();
 app.use(async (req, res, next) => {
     if (!req.url.match(/.*\.css$/)) {
         next();
         return;
     }
-    console.log(req.url);
     let file = (await fs.readFile(`../client/${req.url}`)).toString();
     res.write(minify(file).css);
     res.end();
@@ -50,6 +51,10 @@ let messageCallbacks = {};
 messageCallbacks[categories.system] = {
     "connect": (ws, data) => {
         console.log("New connection established!");
+        if (data.time < startTime) {
+            ws.send(JSON.stringify({ category: categories.system, type: "refresh" }));
+            return;
+        }
         ws.send(JSON.stringify({ category: categories.system, type: "confirm" }));
     }
 }
@@ -64,8 +69,6 @@ wss.on('connection', function connection(ws) {
     ws.on('error', console.error);
 
     ws.on('message', function message(json) {
-        console.log('received: %s', json);
-
         let data = JSON.parse(json);
         messageCallbacks[data.category][data.type](ws, data);
     });
