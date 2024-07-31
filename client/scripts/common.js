@@ -9,6 +9,26 @@ if (document.getElementById("navbar") !== null) {
         .then(data => { document.getElementById("navbar").innerHTML = data; });
 }
 
+// General Utilities
+
+function slugify(str) {
+    return str.replace(/\s/g, "");
+}
+
+function getRandomNumber(min, max) {
+    return (max - min) * Math.random() + min;
+}
+
+function loadImage(path) {
+    return new Promise(resolve => {
+        let image = new Image();
+        image.onload = resolve.bind(resolve, image);
+        image.src = path;
+    });
+}
+
+// Websocket
+
 const serverURL = `ws://${window.location.host}`;
 
 const systemCategory = "sys";
@@ -60,21 +80,7 @@ function handleSystemMessage(msg) {
 }
 messageCallbacks[systemCategory] = handleSystemMessage;
 
-function getRandomNumber(min, max) {
-    return (max - min) * Math.random() + min;
-}
-
-function fixCenterText() {
-    let centerTexts = document.getElementsByClassName("center-text");
-    for (let t of centerTexts) {
-        t.style.paddingLeft = "0";
-        let l = t.getBoundingClientRect().left;
-        if (l % 1) {
-            t.style.paddingLeft = "1px";
-        }
-    }
-}
-fixCenterText();
+// Black Tower Utilities
 
 const smallFontWidth = 5;
 const smallFontHeight = 7;
@@ -84,35 +90,32 @@ const smallFont = new Promise((resolve, reject) => {
     image.onload = resolve.bind(resolve, image);
     image.src = '/assets/fonts/small-font.png';
 });
-
 const smallFontChars = {
     '/': 50,
     ' ': 55,
 }
 
-function loadImage(path) {
-    return new Promise(resolve => {
-        let image = new Image();
-        image.onload = resolve.bind(resolve, image);
-        image.src = path;
-    });
-}
-
+/**
+ * 
+ * @param {CanvasRenderingContext2D} ctx 
+ * @param {Number} x 
+ * @param {Number} y 
+ * @param {String} string 
+ */
 async function writeSmall(ctx, x, y, string) {
     let xx = x;
     for (let i = 0; i < string.length; i++) {
         const c = string[i];
+
+        let charX = smallFontChars[c] ?? smallFontWidth * c;
+
         switch (c) {
             case ' ':
-                xx += 5;
-                break;
-            case '/':
-                ctx.drawImage(await smallFont, smallFontChars['/'], 0, smallFontWidth, smallFontHeight, xx, y, smallFontWidth, smallFontHeight);
-                xx += 5;
+                xx += smallFontWidth;
                 break;
             default:
-                ctx.drawImage(await smallFont, smallFontWidth * c, 0, smallFontWidth, smallFontHeight, xx, y, smallFontWidth, smallFontHeight);
-                xx += 5;
+                ctx.drawImage(await smallFont, charX, 0, smallFontWidth, smallFontHeight, xx, y, smallFontWidth, smallFontHeight);
+                xx += smallFontWidth;
         }
     }
 }
@@ -128,7 +131,7 @@ const barFill = loadImage('/assets/textures/bar-fill.png');
  * @param {Number} width 
  * @param {Number} fillValue 
  * @param {Number} fillMax 
- * @param {Number} fillColor 
+ * @param {String} fillColor 
  * @param {Image} labelImage 
  * @param {Boolean} text 
  */
@@ -285,3 +288,18 @@ async function drawSegmentedBar(ctx, x, y, fillValue, fillMax, fillColor) {
 
     ctx.resetTransform();
 }
+
+// Misc
+
+function fixCenterText() {
+    let centerTexts = document.getElementsByClassName("center-text");
+    for (let t of centerTexts) {
+        t.style.paddingLeft = "0";
+        let l = t.getBoundingClientRect().left;
+        if (l % 1) {
+            t.style.paddingLeft = "1px";
+        }
+    }
+}
+fixCenterText();
+
