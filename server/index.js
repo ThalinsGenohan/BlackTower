@@ -56,14 +56,17 @@ messageCallbacks[categories.system] = {
             return;
         }
         ws.send(JSON.stringify({ category: categories.system, type: "confirm" }));
-    }
-}
+    },
+    "command": (ws, data) => {
+
+    },
+};
 messageCallbacks[categories.character] = {
     "allfull": (ws, data) => {
         console.log("Sending all character data...");
         ws.send(JSON.stringify({ category: categories.character, type: "allfull", chars: characters }));
     }
-}
+};
 
 wss.on('connection', function connection(ws) {
     ws.on('error', console.error);
