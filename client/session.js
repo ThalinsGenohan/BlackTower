@@ -9,7 +9,7 @@ let sessionCallbacks = {};
 
 async function addFullSheet(charID) {
     let template = await sheetTemplate;
-    if (charactersElement.getElementById(charID)) {
+    if (document.getElementById(charID)) {
         return;
     }
 
