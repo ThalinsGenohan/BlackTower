@@ -31,8 +31,6 @@ function loadImage(path) {
 
 const serverURL = `ws${(window.location.hostname != "localhost" ? "s" : "")}://${window.location.host}/ws`;
 
-const systemCategory = "sys";
-
 let messageCallbacks = {};
 
 /** @type {WebSocket} */
