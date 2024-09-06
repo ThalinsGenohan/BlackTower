@@ -231,8 +231,9 @@ sessionCallbacks["charnames"] = handleNoSessionCharacters;
 
 function startSessionButton() {
     let charList = document.getElementById("dm-char-list");
-    let selectedChars = [...charList.querySelectorAll("input:checked")].map(e => e.dataset.name);
-    sendMessage("session", "start", { chars: selectedChars });
+    let selectedChars = [...charList.querySelectorAll("input:checked")].map(e => `"${e.dataset.name}"`);
+    sendConsoleCommand(`session new ${selectedChars.join(" ")}`);
+    // sendMessage("session", "start", { chars: selectedChars });
 }
 
 function startSession() {

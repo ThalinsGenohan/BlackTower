@@ -23,7 +23,7 @@ document.addEventListener('keydown', (event) => {
             consoleBuffer = `${consolePreCursor}${consolePostCursor}`.trim();
             if (consoleBuffer != "") {
                 console.log(`Sending command: '${consoleBuffer}'`);
-                sendMessage("system", "console", { command: consoleBuffer });
+                sendConsoleCommand(consoleBuffer);
             }
         case "Escape":
             toggleConsole();
@@ -120,4 +120,19 @@ function toggleDMMode() {
         document.body.classList.add("dm-mode");
     else
         document.body.classList.remove("dm-mode");
+}
+
+/**
+ * 
+ * @param {string} str 
+ */
+function sendConsoleCommand(str) {
+    let space = str.indexOf(" ");
+    if (space == -1) {
+        sendMessage("console", str);
+        return;
+    }
+    let command = str.substring(0, space).trim();
+    let args = str.substring(space, str.length).trim();
+    sendMessage("console", command, { args: args });
 }

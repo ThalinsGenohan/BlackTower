@@ -120,14 +120,6 @@ messageCallbacks["system"] = {
         }
         sendMessage(ws, "system", "confirm");
     },
-    "console": (ws: WebSocket, data: { command: string }) => {
-        console.log(`New text command received: ${data.command.toString()}`);
-        if (data.command == process.env.DM_PASSWORD) {
-            sendMessage(ws, "system", "dm", { token: dmToken });
-            return;
-        }
-        handleCommand(data.command);
-    },
 }
 messageCallbacks["character"] = {
     "chardata": (ws: WebSocket, data: any) => {
@@ -175,7 +167,16 @@ wss.on('connection', function connection(ws) {
     ws.on('message', function message(json) {
         let data = JSON.parse(json.toString());
         console.log(`Message from client:\n\t${json}`);
-        messageCallbacks[data.category]?.[data.type]?.(ws, data);
+        if (data.category != "console") {
+            messageCallbacks[data.category]?.[data.type]?.(ws, data);
+            return;
+        }
+        if (data.type == process.env.DM_PASSWORD) {
+            sendMessage(ws, "system", "dm", { token: dmToken });
+            return;
+        }
+        handleCommand(ws, data.type, data.args);
+        return;
     });
 });
 
@@ -183,14 +184,19 @@ server.listen(process.env.PORT);
 
 const dmCommands: Map<string, Function> = new Map<string, Function>();
 
-function handleCommand(str: string) {
+function handleCommand(ws: WebSocket, command: string, argsStr?: string) {
+    if (!argsStr) {
+        dmCommands.get(command)?.(null);
+        return;
+    }
+
     let args: Array<string> = [];
     let current: string = "";
     let quote: string | null = null;
-    for (let i = 0; i < str.length; i++) {
-        let c = str[i];
+    for (let i = 0; i < argsStr.length; i++) {
+        let c = argsStr[i];
         if (c == "\\") {
-            current += str[++i];
+            current += argsStr[++i];
             continue;
         }
         if (quote != null) {
@@ -221,14 +227,10 @@ function handleCommand(str: string) {
 
     args.push(current);
 
-    console.log(args);
-
-    const command: string | undefined = args.shift();
-    if (command)
-        dmCommands.get(command)?.(args);
+    dmCommands.get(command)?.(ws, args);
 }
 
-dmCommands.set("session", (args: Array<string>) => {
+dmCommands.set("session", (ws: WebSocket, args: Array<string>) => {
     switch (args[0]) {
     case "new":
         let sessionChars: Array<Character> = characters.filter(ch => args.includes(ch.name));

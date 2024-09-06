@@ -259,7 +259,7 @@ body:not(.dm-mode) .dm-only {
     position: absolute;
     left: 0;
     bottom: 0;
-    height: 1em;
+    height: 2em;
     width: 100vw;
     background-color: rgba(0, 0, 0, var(--box-opacity));
     color: var(--text-color);
@@ -267,7 +267,12 @@ body:not(.dm-mode) .dm-only {
     font-size: 100%;
 }
 
+.console-log {
+    height: 1em;
+}
+
 .console-input {
+    height: 1em;
     margin-left: 8px;
 }
 
