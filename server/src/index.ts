@@ -13,6 +13,16 @@ const startTime = Date.now();
 
 const app = connect();
 app.use(async (req, res, next) => {
+    if (req.url && !req.url.match(/\./)) {
+        let url = req.url;
+        console.log(url);
+        if (url == "/") {
+            url = "/index";
+        }
+        res.write(await generateHTML(`${url}.html`));
+        res.end();
+        return;
+    }
     if (!req.url?.match(/.*\.css$/)) {
         next();
         return;
@@ -22,6 +32,26 @@ app.use(async (req, res, next) => {
     res.end();
 });
 app.use(serveStatic("../client", { extensions: ['html'] }));
+
+async function generateHTML(url: string) {
+    let template = (await fs.readFile("assets/templates/common.html")).toString();
+    let file;
+    try {
+        file = (await fs.readFile(`../client/${url}`)).toString();
+    } catch (e) {
+        return "";
+    }
+
+    let headStart = file.indexOf("<head>") + 6;
+    let headEnd = file.indexOf("</head>");
+    let head = file.substring(headStart, headEnd);
+
+    let bodyStart = file.indexOf("<body>") + 6;
+    let bodyEnd = file.indexOf("</body>");
+    let body = file.substring(bodyStart, bodyEnd);
+
+    return template.replace("$$head", head).replace("$$body", body);
+}
 
 let server = http.createServer(app);
 
