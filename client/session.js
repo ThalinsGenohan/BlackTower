@@ -5,11 +5,14 @@ const sheetTemplate = fetch("/assets/templates/character-sheet-session.html")
 const skillEntryTemplate = fetch("/assets/templates/skill-list-entry.html")
     .then(entry => entry.text());
 
-const characterCategory = "char";
-let characterCallbacks = {};
+let sessionCallbacks = {};
 
 async function addFullSheet(charID) {
     let template = await sheetTemplate;
+    if (charactersElement.getElementById(charID)) {
+        return;
+    }
+
     let element = document.createElement("div");
     element.id = charID;
     element.innerHTML = template.replace(/\{cID\}/g, charID);
@@ -148,7 +151,7 @@ async function updateClassMechanic(cID, num) {
     const y = 16;
 
     const numPos = { x: width - 45, y: y + 2 };
-    drawBar(ctx, 0, y, width, current, max, "#ffdf00", await loadImage(`/assets/textures/mp-label.png`)).then(() => {
+    drawBar(ctx, 0, y, width, current, max, "hsl(51 100 50%)", await loadImage(`/assets/textures/mp-label.png`)).then(() => {
         writeSmall(ctx, numPos.x, numPos.y, `${' '.repeat(3 - current.toString().length)}${current}/${' '.repeat(3 - max.toString().length)}${max}`);
     });
 }
@@ -184,7 +187,7 @@ function handleCharacterMessage(msg) {
     characterCallbacks[msg.type](msg)
 }
 
-async function addAllCharacters(msg) {
+function addAllCharacters(msg) {
     msg.chars.forEach(async c => {
         if (!(c.name in characters)) {
             await addFullSheet(slugify(c.name));
@@ -199,4 +202,4 @@ function handleUpdateMessage(msg) {
 }
 
 
-messageCallbacks[characterCategory] = handleCharacterMessage;
+messageCallbacks["session"] = handleSessionMessage;
