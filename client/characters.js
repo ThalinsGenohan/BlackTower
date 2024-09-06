@@ -5,7 +5,6 @@ const sheetTemplate = fetch("/assets/templates/character-sheet-full.html")
 const skillEntryTemplate = fetch("/assets/templates/skill-list-entry.html")
     .then(entry => entry.text());
 
-const characterCategory = "char";
 let characterCallbacks = {};
 
 function slugify(str) {
@@ -102,8 +101,7 @@ connectToServer().then(() => {
 });
 
 function handleCharacterMessage(msg) {
-    console.log("character message received");
-    characterCallbacks[msg.type](msg)
+    characterCallbacks[msg.type]?.(msg)
 }
 
 function addAllCharacters(msg) {
@@ -121,4 +119,4 @@ function handleUpdateMessage(msg) {
 }
 
 
-messageCallbacks[characterCategory] = handleCharacterMessage;
+messageCallbacks["character"] = handleCharacterMessage;
