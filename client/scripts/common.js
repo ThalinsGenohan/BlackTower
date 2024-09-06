@@ -42,6 +42,17 @@ let reconnectDelay = 1;
 
 const startTime = Date.now();
 
+/**
+ * Values:
+ *   starting     - not yet attempted to connect
+ *   start_failed - failed to connect on first attempt
+ *   connected    - successfully connected
+ *   reconnecting - attempting to reconnect after disconnecting
+ *   refreshing   - server sent a refresh command to client
+ */
+let socketStatus = localStorage.getItem("refreshing") ? "refreshing" : "starting";
+let socketConnectStart = 0;
+
 function connectToServer() {
     return new Promise((resolve, reject) => {
         socket = new WebSocket(serverURL);
@@ -51,26 +62,46 @@ function connectToServer() {
         });
 
         socket.addEventListener("open", (event) => {
-            sendMessage(systemCategory, "connect", { time: startTime });
+            sendMessage("system", "connect", {
+                status: socketStatus,
+                startTime: startTime,
+                connectTime: Date.now() - socketConnectStart,
+            });
             resolve(socket);
             reconnectDelay = 1;
+            socketStatus = "connected";
+            localStorage.setItem("refreshing", false);
         });
 
         socket.addEventListener("close", (event) => {
-            console.log(`Socket disconnected. Waiting ${reconnectDelay} second${reconnectDelay == 1 ? '' : 's'} before retrying...`);
+            switch (socketStatus) {
+                case "starting":
+                    socketStatus = "start_failed";
+                    socketConnectStart = Date.now();
+                case "start_failed":
+                case "reconnecting":
+                case "refreshing":
+                    console.log(`Connection failed. Retrying in ${reconnectDelay} second${reconnectDelay == 1 ? '' : 's'}...`);
+                    break;
+                case "connected":
+                    socketStatus = "reconnecting";
+                    socketConnectStart = Date.now();
+                    console.log(`Connection lost. Retrying in ${reconnectDelay} second${reconnectDelay == 1 ? '' : 's'}...`);
+                    break;
+            }
             setTimeout(connectToServer, reconnectDelay * 1000);
             reconnectDelay = Math.min(reconnectDelay * 2, 60)
         });
 
         socket.addEventListener("message", (event) => {
-            console.log("Message from server: ", event.data);
+            console.log("Message from server:\n\t", event.data);
             let data = JSON.parse(event.data);
-            messageCallbacks[data.category](data);
+            messageCallbacks[data.category]?.(data);
         });
     });
 }
 
-function sendMessage(category, type, data) {
+function sendMessage(category, type, data = {}) {
     let obj = { category, type, ...data };
     let json = JSON.stringify(obj);
     console.log("Sending to server:\n\t" + json);
@@ -78,12 +109,16 @@ function sendMessage(category, type, data) {
 }
 
 function handleSystemMessage(msg) {
-    console.log("system message received");
-    if (msg.type == "refresh") {
-        window.location.reload();
-    }
+    systemCallbacks[msg.type]?.(msg);
 }
-messageCallbacks[systemCategory] = handleSystemMessage;
+messageCallbacks["system"] = handleSystemMessage;
+let systemCallbacks = {};
+
+function refresh() {
+    localStorage.setItem("refreshing", true);
+    window.location.reload();
+}
+systemCallbacks["refresh"] = refresh;
 
 // Black Tower Utilities
 
@@ -211,6 +246,7 @@ async function drawBar(ctx, x, y, width, fillValue, fillMax, fillColor, labelIma
     const fillWidth = (blankWidth + 6) * (fillValue / fillMax);
     ctx.fillStyle = fillColor;
     ctx.fillRect(fillStart, 1, fillWidth, 6);
+
     const oldGCO = ctx.globalCompositeOperation;
     ctx.globalCompositeOperation = "luminosity";
     ctx.drawImage(fillTexture,
