@@ -197,8 +197,11 @@ function addAllCharacters(msg) {
 sessionCallbacks["chardata"] = addAllCharacters;
 
 function handleSessionEnd() {
-
+    let element = document.getElementById("characters");
+    element.innerHTML = "";
+    handleNoSession();
 }
+sessionCallbacks["end"] = handleSessionEnd;
 
 function handleNoSession() {
     sendMessage("session", "charnames");
