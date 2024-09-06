@@ -1,0 +1,18 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        ".git",
+        "node_modules"
+    ],
+    "verbose": true,
+    "execMap": {
+        "ts": "ts-node"
+    },
+    "watch": [
+        "src"
+    ],
+    "exec": "node -r tsconfig-paths/register -r ts-node/register ./src/index.ts",
+    "ext": "ts, js, json"
+}

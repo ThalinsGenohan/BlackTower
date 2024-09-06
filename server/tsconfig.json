@@ -4,10 +4,12 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "lib": [
-            "es2022"
+            "ESNext"
         ],
         "module": "CommonJS",
-        "moduleResolution": "Node",
+        "target": "ESNext",
+        "composite": true,
+        "declarationMap": true,
         "noEmitOnError": true,
         "noImplicitAny": true,
         "noImplicitOverride": true,
@@ -27,12 +29,18 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "esModuleInterop": true,
-        "target": "es2022",
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
         "paths": {
             "types/*": [
                 "./src/types/*"
             ]
-        }
+        },
+    },
+    "ts-node": {
+        "require": [
+            "tsconfig-paths/register"
+        ]
     },
     "include": [
         "src/**/*"
