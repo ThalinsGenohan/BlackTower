@@ -179,12 +179,11 @@ async function updateBuffs(cID, buffs) {
 }
 
 connectToServer().then(() => {
-    sendMessage(characterCategory, "allfull", {});
+    sendMessage("session", "ping");
 });
 
-function handleCharacterMessage(msg) {
-    console.log("character message received");
-    characterCallbacks[msg.type](msg)
+function handleSessionMessage(msg) {
+    sessionCallbacks[msg.type]?.(msg)
 }
 
 function addAllCharacters(msg) {
@@ -195,7 +194,49 @@ function addAllCharacters(msg) {
         await updateCharacter(new RunCharacter(c));
     });
 }
-characterCallbacks["allfull"] = addAllCharacters;
+sessionCallbacks["chardata"] = addAllCharacters;
+
+function handleSessionEnd() {
+
+}
+
+function handleNoSession() {
+    sendMessage("session", "charnames");
+}
+sessionCallbacks["nosession"] = handleNoSession;
+
+function handleNoSessionCharacters(msg) {
+    let characterNames = msg.charNames;
+
+    const noSessionHTML = `
+    <span>No session is currently active.</span>
+    <span class="dm-only"><br><br>Would you like to start one?</span>
+    <div class="dm-only" id="dm-char-list">
+    ${characterNames.map(name => `
+        <input type="checkbox" data-name="${name}" id="session-${name}">
+        <label for="session-${name}">${name}</label>`).join("<br>")}
+        </div>
+        <button class="dm-only" onclick="startSessionButton()">Begin</button>`;
+
+    let element = document.createElement("div");
+    element.classList.add("box");
+    element.id = "no-session";
+    element.innerHTML = noSessionHTML;
+    charactersElement.append(element);
+}
+sessionCallbacks["charnames"] = handleNoSessionCharacters;
+
+function startSessionButton() {
+    let charList = document.getElementById("dm-char-list");
+    let selectedChars = [...charList.querySelectorAll("input:checked")].map(e => e.dataset.name);
+    sendMessage("session", "start", { chars: selectedChars });
+}
+
+function startSession() {
+    document.getElementById("no-session")?.remove();
+    sendMessage("session", "chardata");
+}
+sessionCallbacks["start"] = startSession;
 
 function handleUpdateMessage(msg) {
 

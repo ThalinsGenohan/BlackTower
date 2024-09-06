@@ -8,6 +8,7 @@ import serveStatic from 'serve-static';
 import { WebSocket, WebSocketServer } from 'ws';
 
 import { Character } from 'types/character';
+import { Session } from 'types/session';
 
 const startTime = Date.now();
 
@@ -134,6 +135,39 @@ messageCallbacks["character"] = {
         sendMessage(ws, "character", "chardata", { chars: characters });
     }
 }
+messageCallbacks["session"] = {
+    "ping": (ws: WebSocket) => {
+        if (session === null) {
+            console.log("No active session");
+            sendMessage(ws, "session", "nosession");
+            return;
+        }
+
+        console.log("Sending all session data...");
+        sendMessage(ws, "session", "start");
+    },
+    "charnames": (ws: WebSocket) => {
+        console.log("Sending charactern names...");
+        sendMessage(ws, "session", "charnames", { charNames: characters.map(c => c.name) });
+    },
+    "chardata": (ws: WebSocket) => {
+        if (session === null) {
+            console.log("No active session");
+            sendMessage(ws, "session", "nosession");
+            return;
+        }
+
+        console.log("Sending all session data...");
+        sendMessage(ws, "session", "chardata", { chars: session?.characters });
+    },
+    "start": (ws: WebSocket, data: any) => {
+        let chars: Array<string> = data.chars;
+        let sessionChars: Array<Character> = characters.filter(ch => chars.includes(ch.name));
+        session = new Session(sessionChars);
+
+        broadcast("session", "start");
+    }
+}
 
 wss.on('connection', function connection(ws) {
     ws.on('error', console.error);
@@ -146,3 +180,65 @@ wss.on('connection', function connection(ws) {
 });
 
 server.listen(process.env.PORT);
+
+const dmCommands: Map<string, Function> = new Map<string, Function>();
+
+function handleCommand(str: string) {
+    let args: Array<string> = [];
+    let current: string = "";
+    let quote: string | null = null;
+    for (let i = 0; i < str.length; i++) {
+        let c = str[i];
+        if (c == "\\") {
+            current += str[++i];
+            continue;
+        }
+        if (quote != null) {
+            if (c == quote)
+                quote = null;
+            else
+                current += c;
+            continue;
+        }
+
+        switch (c) {
+        case '\"':
+        case '\'':
+            quote = c;
+            continue;
+        case ' ':
+            args.push(current);
+            current = "";
+            continue;
+        }
+
+        current += c;
+    }
+    if (quote) {
+        console.error("Invalid command: unclosed quote");
+        return;
+    }
+
+    args.push(current);
+
+    console.log(args);
+
+    const command: string | undefined = args.shift();
+    if (command)
+        dmCommands.get(command)?.(args);
+}
+
+dmCommands.set("session", (args: Array<string>) => {
+    switch (args[0]) {
+    case "new":
+        let sessionChars: Array<Character> = characters.filter(ch => args.includes(ch.name));
+        session = new Session(sessionChars);
+
+        broadcast("session", "start", { chars: session.characters });
+        break;
+    case "end":
+        session = null;
+        broadcast("session", "end");
+        break;
+    }
+});

@@ -97,7 +97,7 @@ async function updateCharacterSkills(cID, data) {
 }
 
 connectToServer().then(() => {
-    sendMessage(characterCategory, "allfull", {});
+    sendMessage("character", "chardata");
 });
 
 function handleCharacterMessage(msg) {
@@ -112,7 +112,7 @@ function addAllCharacters(msg) {
         updateCharacter(c);
     });
 }
-characterCallbacks["allfull"] = addAllCharacters;
+characterCallbacks["chardata"] = addAllCharacters;
 
 function handleUpdateMessage(msg) {
 

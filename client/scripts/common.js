@@ -342,30 +342,3 @@ function fixCenterText() {
     }
 }
 fixCenterText();
-
-let bufferingCommand = false;
-let keyBuffer = "";
-document.addEventListener('keydown', (event) => {
-    if (!bufferingCommand && event.key != "`") {
-        return;
-    }
-
-    switch (event.key) {
-        case "`":
-            bufferingCommand = !bufferingCommand;
-            keyBuffer = "";
-            break;
-        case "Enter":
-            console.log(`Sending command: '${keyBuffer}'`);
-            sendMessage(systemCategory, "textcommand", { command: keyBuffer })
-            bufferingCommand = false;
-            keyBuffer = "";
-            break;
-        case "Backspace":
-            keyBuffer = keyBuffer.substring(0, keyBuffer.length - 1);
-            break;
-        default:
-            keyBuffer += event.key;
-    }
-    rainWidth = bufferingCommand ? 2 : 1;
-});
