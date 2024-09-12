@@ -258,22 +258,47 @@ body:not(.dm-mode) .dm-only {
 .console {
     position: absolute;
     left: 0;
-    bottom: 0;
-    height: 2em;
+    bottom: 1em;
+    height: auto;
     width: 100vw;
-    background-color: rgba(0, 0, 0, var(--box-opacity));
-    color: var(--text-color);
     z-index: 100;
     font-size: 100%;
 }
 
 .console-log {
     height: 1em;
+    padding-left: 8px;
+    transition: color 0s, background-color 0s;
+    color: var(--text-color);
+    background-color: rgba(0, 0, 0, var(--box-opacity));
+}
+
+@keyframes console-fade-anim {
+    50% {
+        color: var(--text-color);
+        background-color: rgba(0, 0, 0, var(--box-opacity));
+    }
+    to {
+        color: rgba(255, 255, 255, 0);
+        background-color: rgba(0, 0, 0, 0);
+    }
+}
+
+.console-fade {
+    animation: console-fade-anim 6s forwards;
+    animation-iteration-count: 1;
 }
 
 .console-input {
+    position: absolute;
+    left: 0;
+    bottom: 0;
     height: 1em;
-    margin-left: 8px;
+    width: 100vw;
+    padding-left: 8px;
+    box-sizing: border-box;
+    color: var(--text-color);
+    background-color: rgba(0, 0, 0, var(--box-opacity));
 }
 
 .hidden {

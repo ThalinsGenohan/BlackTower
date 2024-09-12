@@ -237,10 +237,12 @@ dmCommands.set("session", (ws: WebSocket, args: Array<string>) => {
         session = new Session(sessionChars);
 
         broadcast("session", "start", { chars: session.characters });
+        sendMessage(ws, "console", "log", { str: `Started new session with ${sessionChars.length} characters.` });
         break;
     case "end":
         session = null;
         broadcast("session", "end");
+        sendMessage(ws, "console", "log", { str: "Ended the current session." });
         break;
     }
 });

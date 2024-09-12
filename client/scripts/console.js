@@ -81,12 +81,16 @@ document.addEventListener('keydown', (event) => {
     event.preventDefault();
 });
 
+const consoleElement = document.getElementById("console");
+const consoleInputElement = document.getElementById("console-input");
+let consoleFading = false;
 function toggleConsole() {
-    const consoleElement = document.getElementById("console");
-    const consoleInputElement = document.getElementById("console-input");
     if (consoleOpen) {
         consoleOpen = false;
-        consoleElement.classList.add("hidden");
+        for (let l of consoleElement.children) {
+            l.classList.add("hidden");
+        }
+        consoleInputElement.classList.add("hidden");
         consoleInputElement.innerHTML = "";
         consoleBuffer = "";
         consolePreCursor = "";
@@ -95,7 +99,12 @@ function toggleConsole() {
     }
 
     consoleOpen = true;
-    consoleElement.classList.remove("hidden");
+    consoleFading = false;
+    for (let l of consoleElement.children) {
+        l.classList.remove("console-fade");
+        l.classList.remove("hidden");
+    }
+    consoleInputElement.classList.remove("hidden");
     consoleInputElement.innerHTML = "> |";
 }
 
@@ -135,4 +144,34 @@ function sendConsoleCommand(str) {
     let command = str.substring(0, space).trim();
     let args = str.substring(space, str.length).trim();
     sendMessage("console", command, { args: args });
+}
+
+let consoleCallbacks = {};
+function handleConsoleMessage(msg) {
+    consoleCallbacks[msg.type]?.(msg);
+}
+messageCallbacks["console"] = handleConsoleMessage;
+
+function handleLog(msg) {
+    let logLine = document.createElement("div");
+    logLine.classList.add("console-log", "console-fade");
+    logLine.innerHTML = msg.str;
+    consoleElement.appendChild(logLine);
+    consoleFading = true;
+    setTimeout(hideConsoleLog, 6500, logLine);
+
+    if (consoleElement.childElementCount > 8) {
+        consoleElement.removeChild(consoleElement.firstChild);
+    }
+
+};
+consoleCallbacks["log"] = handleLog;
+
+function hideConsoleLog(line) {
+    if (!consoleFading)
+        return;
+
+    line.classList.add("hidden");
+    line.classList.remove("console-fade");
+    consoleFading = false;
 }

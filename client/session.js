@@ -183,7 +183,7 @@ connectToServer().then(() => {
 });
 
 function handleSessionMessage(msg) {
-    sessionCallbacks[msg.type]?.(msg)
+    sessionCallbacks[msg.type]?.(msg);
 }
 
 function addAllCharacters(msg) {
