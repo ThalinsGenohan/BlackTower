@@ -135,18 +135,16 @@
 }
 
 .hidden-check:hover + .dropdown,
-.hidden-check:hover + .dropdown + .dropdown,
-.hidden-check:hover + .dropdown + .dropdown + .dropdown {
+.hidden-check:hover + .dropdown + .dropdown {
     background-color: rgba(255, 255, 255, 0.25);
 }
 
 .hidden-check:checked + .dropdown,
-.hidden-check:checked + .dropdown + .dropdown,
-.hidden-check:checked + .dropdown + .dropdown + .dropdown {
+.hidden-check:checked + .dropdown + .dropdown {
     border-top: 1px solid;
 }
 
-.hidden-check:checked + .dropdown + .dropdown + .dropdown + .dropdown-contents {
+.hidden-check:checked + .dropdown + .dropdown + .dropdown-contents {
     height: auto;
     border-bottom: 1px solid;
     margin-bottom: 0;
