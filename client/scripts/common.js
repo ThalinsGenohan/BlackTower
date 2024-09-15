@@ -138,14 +138,15 @@ const smallFontChars = {
 /**
  * 
  * @param {CanvasRenderingContext2D} ctx 
- * @param {Number} x 
- * @param {Number} y 
- * @param {String} string 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {string} str
  */
-async function writeSmall(ctx, x, y, string) {
+async function writeSmall(ctx, x, y, str) {
     let xx = x;
-    for (let i = 0; i < string.length; i++) {
-        const c = string[i];
+    str = str.toString();
+    for (let i = 0; i < str.length; i++) {
+        const c = str[i];
 
         let charX = smallFontChars[c] ?? smallFontWidth * c;
 
@@ -335,10 +336,13 @@ function fixCenterText() {
     let centerTexts = document.getElementsByClassName("center-text");
     for (let t of centerTexts) {
         t.style.paddingLeft = "0";
+        let text = t.TEXT_NODE
         let l = t.getBoundingClientRect().left;
         if (l % 1) {
             t.style.paddingLeft = "1px";
         }
     }
 }
-fixCenterText();
+document.onload = () => {
+    fixCenterText();
+};

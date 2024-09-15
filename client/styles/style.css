@@ -51,7 +51,7 @@ a {
     from {
         background-position: 0 0;
     }
-
+    
     to {
         background-position: calc(var(--bg-size) * var(--scr-x)) calc(var(--bg-size) * var(--scr-y));
     }
@@ -98,8 +98,8 @@ h1 {
     display: grid;
     grid-template-columns: 200px auto;
     grid-template-areas:
-        "nav   content"
-        "blank content";
+    "nav   content"
+    "blank content";
     gap: 8px;
     max-width: 2048px;
     margin: auto;
@@ -242,7 +242,7 @@ h1 {
     text-align: center;
     padding: 5px 0;
     border-radius: 6px;
-
+    
     position: absolute;
     z-index: 1;
 }
@@ -303,4 +303,8 @@ body:not(.dm-mode) .dm-only {
 
 .hidden {
     display: none;
+}
+
+.accent-text {
+    color: var(--accent-color);
 }

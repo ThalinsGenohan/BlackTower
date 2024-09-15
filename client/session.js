@@ -17,37 +17,74 @@ async function addFullSheet(charID) {
     element.id = charID;
     element.innerHTML = template.replace(/\{cID\}/g, charID);
     charactersElement.append(element);
+
+    let skillTabs = element.querySelectorAll(".skill-tab");
+    for (let i = 0; i < skillTabs.length; i++) {
+        skillTabs.item(i).addEventListener("click", handleSkillTabs.bind(null, charID, skillTabs, i));
+    }
 }
 
-async function addSkillEntry(charID, skillID) {
+async function addSkillEntry(charID, jobClass, skillID) {
     let template = await skillEntryTemplate;
     let element = document.createElement("div");
     element.className = "table-item";
     element.id = `${charID}-skills-${skillID}`;
     element.innerHTML = template.replace(/\{cID\}/g, charID).replace(/\{skillName\}/g, skillID);
 
-    let skillList = document.querySelector(`#${charID} [data-update="specialtyClass-skills"]`);
+    let skillList = document.querySelector(`#${charID} [data-update="${jobClass}-skills"]`);
     skillList.append(element);
     return element;
 }
 
+/** @type {{ [charID: string]: SessionCharacter }} */
 let characters = {};
 
+/**
+ * 
+ * @param {Event} event
+ * @param {string} cID
+ * @param {NodeListOf<Element>} tabs
+ * @param {number} tabNum
+ */
+function handleSkillTabs(cID, tabs, tabNum) {
+    for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("accent-text");
+        let listID = `${cID}-skill-list-${i + 1}`;
+        document.getElementById(listID).classList.add("hidden");
+    }
+
+    tabs[tabNum].classList.add("accent-text");
+    let listID = `${cID}-skill-list-${tabNum + 1}`;
+    document.getElementById(listID).classList.remove("hidden");
+}
+
+/**
+ * 
+ * @param {SessionCharacter} c 
+ */
 async function updateCharacter(c) {
     const cID = slugify(c.name);
     characters[cID] = c;
 
-    let things = Object.entries(
-        Object.getOwnPropertyDescriptors(
-            Reflect.getPrototypeOf(c)
-        )
-    ).map(e => e[0]);
+    let skillTabs = document.getElementById(cID).querySelectorAll(".skill-tab");
+    for (let tab of skillTabs) {
+        tab.classList.remove("hidden");
+    }
+    if (c.equippedClass == null) {
+        skillTabs[1]?.classList.add("hidden");
+    }
+
+    let things = Object.keys(
+        Object.getOwnPropertyDescriptors(c)
+    ).concat(Object.keys(
+        Object.getOwnPropertyDescriptors(Reflect.getPrototypeOf(c))
+    ));
 
     for (let key of things) {
         if (typeof c[key] === "object") {
             for (let sub in c[key]) {
                 if (sub == "skills") {
-                    updateCharacterSkills(cID, c[key][sub]);
+                    updateCharacterSkills(cID, key, c[key][sub]);
                     continue;
                 }
                 updateCharacterData(cID, `${key}-${sub}`, c[key][sub]);
@@ -58,14 +95,15 @@ async function updateCharacter(c) {
     }
 
     // TEMP
-    updateBar(cID, "hp", c.currentHP - 5, c.maxHP, 2);
-    updateBar(cID, "mp", c.currentMP - 15, c.maxMP, 1);
+    updateBar(cID, "hp", c.currentHP, c.maxHP, 2);
+    updateBar(cID, "mp", c.currentMP, c.maxMP, 1);
     updateClassMechanic(cID, 1);
     updateClassMechanic(cID, 2);
     updateBuffs(cID, c.buffs);
 
     fixCenterText();
 }
+sessionCallbacks["char"] = msg => updateCharacter(new SessionCharacter(msg.char));
 
 const barColors = {
     hp: "#26f50a",
@@ -122,12 +160,12 @@ function updateCharacterData(cID, key, data) {
     }
 }
 
-async function updateCharacterSkills(cID, data) {
+async function updateCharacterSkills(cID, jobClass, data) {
     for (let skill of data) {
         const skillID = slugify(skill.name);
         let elem = document.getElementById(`${cID}-skills-${skillID}`);
         if (elem === null) {
-            await addSkillEntry(cID, skillID);
+            await addSkillEntry(cID, jobClass, skillID);
         }
         for (let key in skill) {
             updateCharacterData(`${cID}-skills-${skillID}`, `skill-${key}`, skill[key]);
@@ -156,6 +194,11 @@ async function updateClassMechanic(cID, num) {
     });
 }
 
+/**
+ * 
+ * @param {string} cID 
+ * @param {{ [key: string]: Buff }} buffs 
+ */
 async function updateBuffs(cID, buffs) {
     /** @type {HTMLCanvasElement} */
     let canvas = document.getElementById(`${cID}-buffs-canvas`);
@@ -167,14 +210,15 @@ async function updateBuffs(cID, buffs) {
     ctx.clearRect(0, 0, width, height);
     ctx.imageSmoothingEnabled = false;
 
-    let i = 1;
     const y = 3;
-    let x = (width / 2) - (12 * buffs.length / 2);
-    for (let buff of buffs) {
-        ctx.drawImage(await loadImage(`/assets/images/buffs/${buff}.png`), x, y);
-        writeSmall(ctx, x + 3, y + (buff.match(/-down/) ? -3 : 13), i.toString());
+    let x = (width / 2) - (12 * Object.keys(buffs).length / 2);
+    for (let b in buffs) {
+        let buff = buffs[b];
+        let buffIconPath = `/assets/images/buffs/${buff.icon}.png`;
+        let buffIcon = await loadImage(buffIconPath);
+        ctx.drawImage(buffIcon, x, y);
+        writeSmall(ctx, x + 3, y + (buff.icon.match(/-down/) ? -3 : 13), buff.turnsRemaining);
         x += 12;
-        i++;
     }
 }
 
@@ -191,7 +235,7 @@ function addAllCharacters(msg) {
         if (!(c.name in characters)) {
             await addFullSheet(slugify(c.name));
         }
-        await updateCharacter(new RunCharacter(c));
+        await updateCharacter(new SessionCharacter(c));
     });
 }
 sessionCallbacks["chardata"] = addAllCharacters;
@@ -199,6 +243,7 @@ sessionCallbacks["chardata"] = addAllCharacters;
 function handleSessionEnd() {
     let element = document.getElementById("characters");
     element.innerHTML = "";
+    characters = {};
     handleNoSession();
 }
 sessionCallbacks["end"] = handleSessionEnd;
@@ -246,5 +291,10 @@ function handleUpdateMessage(msg) {
 
 }
 
+
+function handleNewTurn(msg) {
+    addAllCharacters(msg);
+}
+sessionCallbacks["turn"] = handleNewTurn;
 
 messageCallbacks["session"] = handleSessionMessage;

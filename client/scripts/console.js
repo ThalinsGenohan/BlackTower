@@ -34,7 +34,7 @@ document.addEventListener('keydown', (event) => {
 
             consolePreCursor = consolePreCursor.substring(0, consolePreCursor.length - 1);
             consoleBuffer = `${consolePreCursor}|${consolePostCursor}`;
-            document.getElementById("console-input").innerHTML = `> ${consoleBuffer}`;
+            document.getElementById("console-input").innerText = `> ${consoleBuffer}`;
             consoleCursor--;
             break;
         case "Delete":
@@ -43,7 +43,7 @@ document.addEventListener('keydown', (event) => {
 
             consolePostCursor = consolePostCursor.substring(1, consolePreCursor.length);
             consoleBuffer = `${consolePreCursor}|${consolePostCursor}`;
-            document.getElementById("console-input").innerHTML = `> ${consoleBuffer}`;
+            document.getElementById("console-input").innerText = `> ${consoleBuffer}`;
             break;
         case "Tab":
             break;
@@ -55,7 +55,7 @@ document.addEventListener('keydown', (event) => {
             consolePostCursor = consolePreCursor.charAt(consolePreCursor.length - 1) + consolePostCursor;
             consolePreCursor = consolePreCursor.substring(0, consoleCursor);
             consoleBuffer = `${consolePreCursor}|${consolePostCursor}`;
-            document.getElementById("console-input").innerHTML = `> ${consoleBuffer}`;
+            document.getElementById("console-input").innerText = `> ${consoleBuffer}`;
             break;
         case "ArrowRight":
             if (consoleCursor >= consoleBuffer.length - 1)
@@ -65,7 +65,7 @@ document.addEventListener('keydown', (event) => {
             consolePreCursor = consolePreCursor + consolePostCursor.charAt(0);
             consolePostCursor = consolePostCursor.substring(1, consolePostCursor.length);
             consoleBuffer = `${consolePreCursor}|${consolePostCursor}`;
-            document.getElementById("console-input").innerHTML = `> ${consoleBuffer}`;
+            document.getElementById("console-input").innerText = `> ${consoleBuffer}`;
             break;
 
         default:
@@ -76,7 +76,7 @@ document.addEventListener('keydown', (event) => {
             consoleCursor++;
             consoleBuffer = `${consolePreCursor}|${consolePostCursor}`;
 
-            document.getElementById("console-input").innerHTML = `> ${consoleBuffer}`;
+            document.getElementById("console-input").innerText = `> ${consoleBuffer}`;
     }
     event.preventDefault();
 });
@@ -91,7 +91,7 @@ function toggleConsole() {
             l.classList.add("hidden");
         }
         consoleInputElement.classList.add("hidden");
-        consoleInputElement.innerHTML = "";
+        consoleInputElement.innerText = "";
         consoleBuffer = "";
         consolePreCursor = "";
         consolePostCursor = "";
@@ -105,7 +105,7 @@ function toggleConsole() {
         l.classList.remove("hidden");
     }
     consoleInputElement.classList.remove("hidden");
-    consoleInputElement.innerHTML = "> |";
+    consoleInputElement.innerText = "> |";
 }
 
 let dmToken = "";
@@ -155,7 +155,7 @@ messageCallbacks["console"] = handleConsoleMessage;
 function handleLog(msg) {
     let logLine = document.createElement("div");
     logLine.classList.add("console-log", "console-fade");
-    logLine.innerHTML = msg.str;
+    logLine.innerText = msg.str;
     consoleElement.appendChild(logLine);
     consoleFading = true;
     setTimeout(hideConsoleLog, 6500, logLine);

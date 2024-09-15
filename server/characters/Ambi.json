@@ -24,6 +24,21 @@
 		"resistance": 3,
 		"skills": [
 			{
+				"name": "Test Skill",
+				"description": "This is just a test skill",
+				"mpCost": 999
+			},
+			{
+				"name": "Test Skill 2",
+				"description": "This is just a second test skill",
+				"mpCost": 999
+			},
+			{
+				"name": "Test Skill 3",
+				"description": "This is just a third test skill",
+				"mpCost": 999
+			},
+			{
 				"name": "Store Energy",
 				"description": "Absorb energy from your surroundings, gaining +5 Stored Energy.",
 				"mpCost": 2

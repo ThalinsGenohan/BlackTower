@@ -1,5 +1,5 @@
 import { Character } from "./character";
-import { SessionCharacter } from "./session-character";
+import { SessionCharacter, Buff, Gem } from "./session-character";
 
 export class Session {
     constructor(chars: Array<Character>) {

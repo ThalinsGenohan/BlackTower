@@ -1,4 +1,4 @@
-<div class="sheet-body">
+<div class="sheet-body row">
     <div class="bio box center row">
         <div class="row">
             <div class="column">
@@ -50,4 +50,32 @@
             </div>
         </div>
     </div>
+
+    <div class="skill-list box column center" id="{cID}-skill-list-1">
+        <div class="table">
+            <div class="table-header">
+                <span class="center-text">Skill Name</span>
+                <span class="center-text">MP</span>
+            </div>
+            <div class="table-content" data-update="specialtyClass-skills"></div>
+        </div>
+    </div>
+    <div class="skill-list box column center hidden" id="{cID}-skill-list-2">
+        <div class="table">
+            <div class="table-header">
+                <span class="center-text">Skill Name</span>
+                <span class="center-text">MP</span>
+            </div>
+            <div class="table-content" data-update="equippedClass-skills"></div>
+        </div>
+    </div>
+    <div class="skill-tabs row">
+        <div class="skill-tab center-text box accent-text" id="{cID}-skill-tab-1">
+            <span class="center-text" data-update="specialtyClass-name"></span>
+        </div>
+        <div class="skill-tab center-text box" id="{cID}-skill-tab-2">
+            <span class="center-text" data-update="equippedClass-name"></span>
+        </div>
+    </div>
+</div>
 </div>

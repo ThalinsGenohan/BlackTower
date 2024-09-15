@@ -25,6 +25,7 @@ export class JobClass {
     resistance: number = 0;
     skills: Array<Skill> = [];
 }
+export const JobClasses: { [key: string]: JobClass } = {};
 
 export class Character {
     static get baseHP(): number {
@@ -59,6 +60,7 @@ export class Character {
     static async load(name: String) {
         let file: string = await readFile(`characters/${name}`, { encoding: 'utf-8' });
         let character: Character = JSON.parse(file);
+        JobClasses[character.specialtyClass.name] = character.specialtyClass;
         return character;
     }
 }

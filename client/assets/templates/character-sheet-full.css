@@ -134,7 +134,7 @@
 
 .table {
     gap: 2px;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: auto 38px;
     width: 100%;
 }
 
@@ -151,30 +151,24 @@
 }
 
 .table-content {
-    /* display: grid; */
-    /* grid-template-columns: inherit; */
-    /* grid-auto-rows: max-content; */
     overflow-y: scroll;
-    /*flex-grow: 1;*/
     width: 100%;
     gap: 2px 0;
     scrollbar-width: thin;
-    scrollbar-color: purple transparent;
+    scrollbar-color: white transparent;
     scrollbar-gutter: stable;
-    margin-right: -4px;
-    padding-right: 4px;
+    margin-right: -8px;
+    padding-right: 8px;
 
     scroll-snap-type: y mandatory;
 }
 
 .table-item {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: auto 38px;
     grid-auto-rows: max-content;
     width: 100%;
     gap: 2px 0;
-    margin-right: -4px;
-    padding-right: 4px;
 }
 
 .bar-canvas {

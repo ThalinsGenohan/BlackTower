@@ -16,7 +16,6 @@
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noUncheckedIndexedAccess": true,
-        "noUnusedLocals": true,
         "rootDir": "./src",
         "outDir": "./dist",
         "pretty": true,

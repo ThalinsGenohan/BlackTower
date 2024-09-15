@@ -1,4 +1,4 @@
-class RunCharacter {
+class SessionCharacter {
     static baseStats = {
         "hp": 10,
         "mp": 10,
@@ -8,6 +8,10 @@ class RunCharacter {
         "resistance": 5,
     };
 
+    /**
+     * 
+     * @param {Character} fullCharacter 
+     */
     constructor(fullCharacter) {
         this.full = fullCharacter;
         this.currentHP = this.maxHP;
@@ -17,7 +21,7 @@ class RunCharacter {
     full = null;
 
     getStat(stat) {
-        return RunCharacter.baseStats[stat] +
+        return SessionCharacter.baseStats[stat] +
             this.full?.specialtyClass[stat] +
             (this.equippedClass == null ? 0 : this.equippedClass[stat]);
     }

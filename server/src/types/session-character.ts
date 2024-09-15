@@ -19,32 +19,38 @@ export class SessionCharacter {
     get maxHP(): number {
         return SessionCharacter.baseHP +
             this.full.specialtyClass.hp +
-            (this.equippedClass == null ? 0 : this.equippedClass.hp);
+            (this.equippedClass == null ? 0 : this.equippedClass.hp) +
+            (this.tempStats["maxHP"] ?? 0);
     }
     get maxMP(): number {
         return SessionCharacter.baseMP +
             this.full.specialtyClass.mp +
-            (this.equippedClass == null ? 0 : this.equippedClass.mp);
+            (this.equippedClass == null ? 0 : this.equippedClass.mp) +
+            (this.tempStats["maxMP"] ?? 0);
     }
     get strength(): number {
         return SessionCharacter.baseStrength +
             this.full.specialtyClass.strength +
-            (this.equippedClass == null ? 0 : this.equippedClass.strength);
+            (this.equippedClass == null ? 0 : this.equippedClass.strength) +
+            (this.tempStats["str"] ?? 0);
     }
     get magic(): number {
         return SessionCharacter.baseMagic +
             this.full.specialtyClass.magic +
-            (this.equippedClass == null ? 0 : this.equippedClass.magic);
+            (this.equippedClass == null ? 0 : this.equippedClass.magic) +
+            (this.tempStats["mag"] ?? 0);
     }
     get defense(): number {
         return SessionCharacter.baseDefense +
             this.full.specialtyClass.defense +
-            (this.equippedClass == null ? 0 : this.equippedClass.defense);
+            (this.equippedClass == null ? 0 : this.equippedClass.defense) +
+            (this.tempStats["def"] ?? 0);
     }
     get resistance(): number {
         return SessionCharacter.baseResistance +
             this.full.specialtyClass.resistance +
-            (this.equippedClass == null ? 0 : this.equippedClass.resistance);
+            (this.equippedClass == null ? 0 : this.equippedClass.resistance) +
+            (this.tempStats["res"] ?? 0);
     }
 
     get name(): string { return this.full.name; }
@@ -57,7 +63,10 @@ export class SessionCharacter {
     currentHP: number;
     currentMP: number;
     equippedClass: JobClass | null = null;
-    buffs: { [id: string]: number } = {};
+    buffs: { [id: string]: Buff } = {};
+    gems: { [id: string]: Gem } = {};
+
+    tempStats: { [id: string]: number } = {};
 
     toJSON() {
         return { ...this.full, ...this };
@@ -65,5 +74,24 @@ export class SessionCharacter {
 }
 
 export class Buff {
+    name: string = "";
+    description: string = "";
+    icon: string = "";
+    turnsRemaining: number = 0;
+    unapply: Function | null = null;
+    onClear: Function | null = null;
+    onTurn: Function | null = null;
+    onIncoming: Function | null = null;
+    onOutgoing: Function | null = null;
+}
 
+export class Gem {
+    name: string = "";
+    description: string = "";
+    color: string = "";
+    unapply: Function | null = null;
+    onClear: Function | null = null;
+    onTurn: Function | null = null;
+    onIncoming: Function | null = null;
+    onOutgoing: Function | null = null;
 }

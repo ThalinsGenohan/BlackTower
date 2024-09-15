@@ -1,8 +1,14 @@
 .sheet-body {
     background-color: transparent;
-    width: 512px;
+    width: calc(512px + 4px + 342px);
+    height: 278px;
     padding: 0 0 16px 0;
     gap: 4px;
+
+    display: grid;
+    grid-template-areas:
+        "bio skills"
+        "bio skill-tabs";
     
     image-rendering: pixelated;
 }
@@ -20,11 +26,25 @@
     grid-area: items;
 }
 
-.skill-list-1 {
-    grid-area: skill-list-1;
+.skill-list {
+    grid-area: skills;
+    width: 342px;
+    height: 238px;
+    padding-top: 0;
+    z-index: 1;
 }
-.skill-list-2 {
-    grid-area: skill-list-2;
+
+.skill-tabs {
+    grid-area: skill-tabs;
+    width: 326px;
+    margin-top: -13px;
+    margin-left: 8px;
+}
+
+.skill-tab {
+    padding: 0;
+    width: 50%;
+    height: 48px;
 }
 
 .name {
@@ -96,6 +116,10 @@
     color: grey;
 }
 
+.underline {
+    text-decoration: underline;
+}
+
 .dropdown-contents {
     grid-column: 1 / -1;
     height: 0;
@@ -134,7 +158,7 @@
 
 .table {
     gap: 2px;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: auto 38px;
     width: 100%;
 }
 
@@ -153,24 +177,23 @@
 .table-content {
     overflow-y: scroll;
     width: 100%;
+    height: 182px;
     gap: 2px 0;
     scrollbar-width: thin;
-    scrollbar-color: purple transparent;
+    scrollbar-color: white transparent;
     scrollbar-gutter: stable;
-    margin-right: -4px;
-    padding-right: 4px;
+    margin-right: -8px;
+    padding-right: 8px;
 
     scroll-snap-type: y mandatory;
 }
 
 .table-item {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: auto 38px;
     grid-auto-rows: max-content;
     width: 100%;
     gap: 2px 0;
-    margin-right: -4px;
-    padding-right: 4px;
 }
 
 .bar-canvas {
@@ -214,4 +237,11 @@
     width: 144px;
     height: 46px;
     margin-top: 4px;
+}
+
+.skill-tab:hover {
+    color: black;
+    text-shadow: none;
+    background-image: linear-gradient(to top left, black -100%, var(--accent-color));
+    cursor: pointer;
 }

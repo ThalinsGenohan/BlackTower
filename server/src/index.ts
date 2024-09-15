@@ -7,10 +7,15 @@ import { minify } from 'csso';
 import serveStatic from 'serve-static';
 import { WebSocket, WebSocketServer } from 'ws';
 
-import { Character } from 'types/character';
+import { Character, JobClass, JobClasses, PronounList } from 'types/character';
+import { SessionCharacter, Buff, Gem } from 'types/session-character';
 import { Session } from 'types/session';
 
 const startTime = Date.now();
+
+interface Indexable {
+    [key: string]: any;
+}
 
 function getHashCode(str: string) {
     var hash = 0,
@@ -173,6 +178,7 @@ wss.on('connection', function connection(ws) {
         }
         if (data.type == process.env.DM_PASSWORD) {
             sendMessage(ws, "system", "dm", { token: dmToken });
+            sendConsoleLog(ws, "DM mode unlocked");
             return;
         }
         handleCommand(ws, data.type, data.args);
@@ -184,9 +190,19 @@ server.listen(process.env.PORT);
 
 const dmCommands: Map<string, Function> = new Map<string, Function>();
 
+function sendConsoleLog(ws: WebSocket, log: string) {
+    sendMessage(ws, "console", "log", { str: log });
+}
+
 function handleCommand(ws: WebSocket, command: string, argsStr?: string) {
     if (!argsStr) {
-        dmCommands.get(command)?.(null);
+        let comm = dmCommands.get(command);
+        if (!comm) {
+            sendConsoleLog(ws, `Command '${command} not found`);
+            return;
+        }
+        comm!(ws, null);
+
         return;
     }
 
@@ -227,7 +243,12 @@ function handleCommand(ws: WebSocket, command: string, argsStr?: string) {
 
     args.push(current);
 
-    dmCommands.get(command)?.(ws, args);
+    let comm = dmCommands.get(command);
+    if (!comm) {
+        sendConsoleLog(ws, `Command '${command} not found`);
+        return;
+    }
+    comm!(ws, args);
 }
 
 dmCommands.set("session", (ws: WebSocket, args: Array<string>) => {
@@ -237,12 +258,197 @@ dmCommands.set("session", (ws: WebSocket, args: Array<string>) => {
         session = new Session(sessionChars);
 
         broadcast("session", "start", { chars: session.characters });
-        sendMessage(ws, "console", "log", { str: `Started new session with ${sessionChars.length} characters.` });
+        sendConsoleLog(ws, `Started new session with ${sessionChars.length} characters.`);
         break;
     case "end":
         session = null;
         broadcast("session", "end");
-        sendMessage(ws, "console", "log", { str: "Ended the current session." });
+        sendConsoleLog(ws, "Ended the current session.");
+        break;
+    case "turn":
+        if (session == null) {
+            sendConsoleLog(ws, "There is not currently a session active");
+            return;
+        }
+
+        for (let c of session.characters) {
+            for (let b in c.buffs) {
+                let buff = c.buffs[b]!;
+                buff.onTurn?.();
+                buff.turnsRemaining--;
+                if (buff.turnsRemaining <= 0) {
+                    buff.onClear?.();
+                    buff.unapply?.();
+                    delete c.buffs[b];
+                }
+            }
+        }
+
+        broadcast("session", "turn", { chars: session?.characters });
         break;
     }
 });
+
+dmCommands.set("data", (ws: WebSocket, args: Array<string>) => {
+    if (session == null) {
+        sendConsoleLog(ws, "Data command can only be used when a session is active. Did you mean chardata?");
+        return;
+    }
+    if (!args || args.length < 3) {
+        sendConsoleLog(ws, "Data command missing args: data <character> <data> <new value>");
+        return;
+    }
+
+    const cName = args[0];
+    let character = session.characters.find(c => c.name == cName);
+    if (character == undefined) {
+        sendConsoleLog(ws, `Character '${cName}' not found`);
+        return;
+    }
+
+    let layers = args[1]!.split(".")!;
+    let lastLayer = layers.pop()!;
+
+    let current = character as Indexable;
+    for (let layer of layers) {
+        if (!Object.hasOwn(current, layer)) {
+            sendConsoleLog(ws, `Unknown key: '${layer}' from '${args[1]}'`);
+            return;
+        }
+        current = current[layer];
+    }
+    if (!Object.hasOwn(current, lastLayer)) {
+        sendConsoleLog(ws, `Unknown key: '${lastLayer}' from '${args[1]}'`);
+        return;
+    }
+
+    let data: any = args[2];
+    switch (typeof (current[lastLayer])) {
+    case 'number':
+        data = Number(data);
+        break;
+    case 'string':
+        data = String(data);
+        break;
+
+    case 'object':
+        switch (lastLayer) {
+        case "equippedClass":
+            if (data == "null") {
+                data = null;
+                break;
+            }
+            if (data == character.specialtyClass.name) {
+                sendConsoleLog(ws, "Cannot equip the same class twice");
+                return;
+            }
+            data = JobClasses[data];
+            if (!data) {
+                sendConsoleLog(ws, `Class '${args[2]}' does not exist`);
+                return;
+            }
+            break;
+        default:
+            console.log(`Unknown type: ${current[lastLayer].__proto__}`);
+            break;
+        }
+        break;
+    }
+    current[lastLayer] = data;
+
+    sendMessage(ws, "session", "char", { char: character });
+});
+
+dmCommands.set("buff", (ws: WebSocket, args: Array<string>) => {
+    if (session == null) {
+        sendConsoleLog(ws, "Buff command can only be used when a session is active");
+        return;
+    }
+    if (!args || args.length < 5) {
+        sendConsoleLog(ws, "Buff command missing args: buff <player> <name> <icon> <turns> [effects...]");
+        return;
+    }
+
+    const cName = args.shift();
+    let character = session.characters.find(c => c.name == cName);
+    if (character == undefined) {
+        sendConsoleLog(ws, `Character '${cName}' not found`);
+        return;
+    }
+
+    let name: string = args.shift()!;
+    let iconID: string = args.shift()!;
+    let turns: number = Number(args.shift()!);
+    let effects: { [key: string]: string } = {};
+    for (let arg of args) {
+        let effect = arg.split(':');
+        if (effect.length != 2) {
+            return;
+        }
+        effects[effect[0]!] = effect[1]!;
+    }
+
+    let buff = new Buff();
+    buff.name = name;
+    buff.icon = iconID;
+    buff.turnsRemaining = turns;
+
+    // Separate triggers
+    for (let [when, what] of Object.entries(effects)) {
+        // Separate stats
+        let whatParts = what.split(',');
+        let actions: { stat: string, num: number }[] = [];
+        let unapplyActions: { stat: string, num: number }[] = [];
+        for (let whatPart of whatParts) {
+            let [stat, op, numStr] = whatPart.split(/\b/);
+            if (!stat || !op || !numStr) {
+                return;
+            }
+            let num = Number(op + numStr);
+            actions.push({ stat, num });
+            if (when == "apply")
+                unapplyActions.push({ stat, num: -num });
+        }
+
+        switch (when) {
+        case "apply":
+            ActivateBuff(character, actions);
+            buff.unapply = ActivateBuff.bind(null, character, unapplyActions);
+            break;
+        case "clear":
+            buff.onClear = ActivateBuff.bind(null, character, actions);
+            break;
+        case "turn":
+            buff.onTurn = ActivateBuff.bind(null, character, actions);
+            break;
+        case "in":
+            buff.onIncoming = ActivateBuff.bind(null, character, actions);
+            break;
+        case "out":
+            buff.onOutgoing = ActivateBuff.bind(null, character, actions);
+            break;
+        }
+    }
+    character.buffs[buff.name] = buff;
+    sendMessage(ws, "session", "char", { char: character });
+});
+
+function ActivateBuff(character: SessionCharacter, actions: { stat: string, num: number }[]) {
+    for (let action of actions) {
+        let statKey: string = action.stat;
+        switch (action.stat) {
+        case "hp":
+            statKey = "currentHP";
+            break;
+        case "mp":
+            statKey = "currentMP";
+            break;
+        }
+        if (!Object.hasOwn(character, statKey)) {
+            character.tempStats[statKey] = action.num + (character.tempStats[statKey] ?? 0);
+        }
+        else {
+            (character as Indexable)[statKey] += action.num;
+        }
+    }
+}
