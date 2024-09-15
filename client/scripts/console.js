@@ -1,6 +1,5 @@
 let consoleOpen = false;
 let consoleBuffer = "";
-let consoleCursor = 0;
 let consolePreCursor = "";
 let consolePostCursor = "";
 document.addEventListener('keydown', (event) => {
@@ -29,16 +28,15 @@ document.addEventListener('keydown', (event) => {
             toggleConsole();
             break;
         case "Backspace":
-            if (consoleCursor == 0)
+            if (consolePreCursor == "")
                 break;
 
             consolePreCursor = consolePreCursor.substring(0, consolePreCursor.length - 1);
             consoleBuffer = `${consolePreCursor}|${consolePostCursor}`;
             document.getElementById("console-input").innerText = `> ${consoleBuffer}`;
-            consoleCursor--;
             break;
         case "Delete":
-            if (consoleCursor >= consoleBuffer.length - 1)
+            if (consolePostCursor == "")
                 break;
 
             consolePostCursor = consolePostCursor.substring(1, consolePreCursor.length);
@@ -48,19 +46,17 @@ document.addEventListener('keydown', (event) => {
         case "Tab":
             break;
         case "ArrowLeft":
-            if (consoleCursor == 0)
+            if (consolePreCursor == "")
                 break;
-            consoleCursor--;
 
             consolePostCursor = consolePreCursor.charAt(consolePreCursor.length - 1) + consolePostCursor;
-            consolePreCursor = consolePreCursor.substring(0, consoleCursor);
+            consolePreCursor = consolePreCursor.substring(0, consolePreCursor.length - 1);
             consoleBuffer = `${consolePreCursor}|${consolePostCursor}`;
             document.getElementById("console-input").innerText = `> ${consoleBuffer}`;
             break;
         case "ArrowRight":
-            if (consoleCursor >= consoleBuffer.length - 1)
+            if (consolePostCursor == "")
                 break;
-            consoleCursor++;
 
             consolePreCursor = consolePreCursor + consolePostCursor.charAt(0);
             consolePostCursor = consolePostCursor.substring(1, consolePostCursor.length);
@@ -73,7 +69,6 @@ document.addEventListener('keydown', (event) => {
                 break;
 
             consolePreCursor += event.key;
-            consoleCursor++;
             consoleBuffer = `${consolePreCursor}|${consolePostCursor}`;
 
             document.getElementById("console-input").innerText = `> ${consoleBuffer}`;
