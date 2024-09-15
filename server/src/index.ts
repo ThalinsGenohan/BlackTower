@@ -361,7 +361,7 @@ dmCommands.set("data", (ws: WebSocket, args: Array<string>) => {
     }
     current[lastLayer] = data;
 
-    sendMessage(ws, "session", "char", { char: character });
+    broadcast("session", "char", { char: character });
 });
 
 dmCommands.set("buff", (ws: WebSocket, args: Array<string>) => {
@@ -435,7 +435,7 @@ dmCommands.set("buff", (ws: WebSocket, args: Array<string>) => {
         }
     }
     character.buffs[buff.name] = buff;
-    sendMessage(ws, "session", "char", { char: character });
+    broadcast("session", "char", { char: character });
 });
 
 function ActivateBuff(character: SessionCharacter, actions: { stat: string, num: number }[]) {
