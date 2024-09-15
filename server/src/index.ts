@@ -124,6 +124,7 @@ messageCallbacks["system"] = {
             console.log("New connection established!");
         }
         sendMessage(ws, "system", "confirm");
+        broadcast("system", "viewers", { count: wss.clients.size });
     },
 }
 messageCallbacks["character"] = {
@@ -183,6 +184,10 @@ wss.on('connection', function connection(ws) {
         }
         handleCommand(ws, data.type, data.args);
         return;
+    });
+
+    ws.on('close', () => {
+        broadcast("system", "viewers", { count: wss.clients.size });
     });
 });
 

@@ -6,7 +6,8 @@ if (localStorage.rain === undefined) localStorage.rain = true; // default true
 if (document.getElementById("navbar") !== null) {
     fetch("/assets/templates/navbar.html")
         .then(data => { return data.text(); })
-        .then(data => { document.getElementById("navbar").innerHTML = data; });
+        .then(data => { document.getElementById("navbar").innerHTML = data; })
+        .then(updateViewElement);
 }
 
 // General Utilities
@@ -117,6 +118,20 @@ function refresh() {
     window.location.reload();
 }
 systemCallbacks["refresh"] = refresh;
+
+let viewCount = 0;
+function updateViewCount(msg) {
+    viewCount = msg.count;
+    updateViewElement();
+}
+systemCallbacks["viewers"] = updateViewCount;
+
+function updateViewElement() {
+    let viewCounter = document.getElementById("view-count");
+    if (!viewCounter)
+        return;
+    viewCounter.innerText = `Viewing: ${viewCount}`;
+}
 
 // Black Tower Utilities
 

@@ -152,6 +152,10 @@ h1 {
     text-shadow: none;
 }
 
+.view-count {
+    font-size: 50%;
+}
+
 .box {
     /*background-color: var(--fallback-color);*/
     display: block;
