@@ -438,6 +438,79 @@ dmCommands.set("buff", (ws: WebSocket, args: Array<string>) => {
     broadcast("session", "char", { char: character });
 });
 
+dmCommands.set("gem", (ws: WebSocket, args: string[]) => {
+    if (session == null) {
+        sendConsoleLog(ws, "Gem command can only be used when a session is active");
+        return;
+    }
+    if (!args || args.length < 4) {
+        sendConsoleLog(ws, "Gem command missing args: gem <player> <slot> <name> <color> [effects...]");
+        return;
+    }
+
+    const cName = args.shift();
+    let character = session.characters.find(c => c.name == cName);
+    if (character == undefined) {
+        sendConsoleLog(ws, `Character '${cName}' not found`);
+        return;
+    }
+
+    let slot: number = Number(args.shift()!);
+    let name: string = args.shift()!;
+    let color: string = args.shift()!;
+    let effects: { [key: string]: string } = {};
+    for (let arg of args) {
+        let effect = arg.split(':');
+        if (effect.length != 2) {
+            return;
+        }
+        effects[effect[0]!] = effect[1]!;
+    }
+
+    let gem = new Gem();
+    gem.name = name;
+    gem.color = color;
+
+    // Separate triggers
+    for (let [when, what] of Object.entries(effects)) {
+        // Separate stats
+        let whatParts = what.split(',');
+        let actions: { stat: string, num: number }[] = [];
+        let unapplyActions: { stat: string, num: number }[] = [];
+        for (let whatPart of whatParts) {
+            let [stat, op, numStr] = whatPart.split(/\b/);
+            if (!stat || !op || !numStr) {
+                return;
+            }
+            let num = Number(op + numStr);
+            actions.push({ stat, num });
+            if (when == "apply")
+                unapplyActions.push({ stat, num: -num });
+        }
+
+        switch (when) {
+        case "apply":
+            ActivateBuff(character, actions);
+            gem.unapply = ActivateBuff.bind(null, character, unapplyActions);
+            break;
+        case "clear":
+            gem.onClear = ActivateBuff.bind(null, character, actions);
+            break;
+        case "turn":
+            gem.onTurn = ActivateBuff.bind(null, character, actions);
+            break;
+        case "in":
+            gem.onIncoming = ActivateBuff.bind(null, character, actions);
+            break;
+        case "out":
+            gem.onOutgoing = ActivateBuff.bind(null, character, actions);
+            break;
+        }
+    }
+    character.gems[slot] = gem;
+    broadcast("session", "char", { char: character });
+});
+
 function ActivateBuff(character: SessionCharacter, actions: { stat: string, num: number }[]) {
     for (let action of actions) {
         let statKey: string = action.stat;
