@@ -87,8 +87,8 @@ class SessionCharacter {
     equippedClass = null;
     /** @type {{ [key: string]: Buff }} */
     buffs = {};
-    /** @type {{ [key: string]: Gem }} */
-    gems = {};
+    /** @type {Gem[]} */
+    gems = [null, null, null, null, null, null, null];
 
     /** @type {{ [id: string]: number }} */
     tempStats = {};

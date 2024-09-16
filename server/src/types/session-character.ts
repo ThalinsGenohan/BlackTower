@@ -64,7 +64,8 @@ export class SessionCharacter {
     currentMP: number;
     equippedClass: JobClass | null = null;
     buffs: { [id: string]: Buff } = {};
-    gems: { [id: string]: Gem } = {};
+    gems: [(Gem | null), (Gem | null), (Gem | null), (Gem | null),
+        (Gem | null), (Gem | null), (Gem | null)] = [null, null, null, null, null, null, null];
 
     tempStats: { [id: string]: number } = {};
 

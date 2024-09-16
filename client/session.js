@@ -99,6 +99,7 @@ async function updateCharacter(c) {
     updateBar(cID, "mp", c.currentMP, c.maxMP, 1);
     updateClassMechanic(cID, 1);
     updateClassMechanic(cID, 2);
+    updateGems(cID, c.gems);
     updateBuffs(cID, c.buffs);
 
     fixCenterText();
@@ -220,6 +221,10 @@ async function updateBuffs(cID, buffs) {
         writeSmall(ctx, x + 3, y + (buff.icon.match(/-down/) ? -3 : 13), buff.turnsRemaining);
         x += 12;
     }
+}
+
+async function updateGems(cID, gems) {
+
 }
 
 connectToServer().then(() => {
