@@ -43,10 +43,11 @@ app.use(async (req, res, next) => {
         return;
     }
     if (!req.url?.match(/.*\.css$/)) {
-        next();
-        return;
+        return next();
     }
-    let file = (await fs.readFile(`../client/${req.url}`)).toString();
+    let file = (await fs.readFile(`../client/${req.url}`).catch(_ => { }))?.toString();
+    if (!file)
+        return next();
     res.write(minify(file).css);
     res.end();
 });
@@ -100,7 +101,7 @@ fs.readdir("characters/").then((value) => {
             characters.push(c);
         })
     });
-    characters.sort((a, b) => a.name.localeCompare(b.name));
+    characters = characters.sort((a, b) => a.name.localeCompare(b.name));
 });
 
 let session: Session | null = null;
@@ -125,6 +126,15 @@ messageCallbacks["system"] = {
         }
         sendMessage(ws, "system", "confirm");
         broadcast("system", "viewers", { count: wss.clients.size });
+    },
+    "dm": (ws: WebSocket, data: { token: number }) => {
+        if (data.token == dmToken) {
+            sendMessage(ws, "system", "dm", { token: dmToken });
+            sendConsoleLog(ws, "DM mode unlocked");
+            return;
+        }
+
+        sendMessage(ws, "system", "nodm");
     },
 }
 messageCallbacks["character"] = {
@@ -182,7 +192,13 @@ wss.on('connection', function connection(ws) {
             sendConsoleLog(ws, "DM mode unlocked");
             return;
         }
-        handleCommand(ws, data.type, data.args);
+        if (data.dm == dmToken) {
+            handleCommand(ws, data.type, data.args);
+        }
+        else {
+            sendConsoleLog(ws, "You do not have DM permissions!");
+            sendMessage(ws, "system", "nodm");
+        }
         return;
     });
 

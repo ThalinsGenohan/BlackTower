@@ -110,16 +110,34 @@ function unlockDMMode(msg) {
     dmToken = msg.token;
     dmUnlocked = true;
 
-    document.cookie = `dm_token=${dmToken}`;
+    setCookie("dm_token", dmToken);
 
-    toggleDMMode();
+    toggleDMMode(true);
 }
 systemCallbacks["dm"] = unlockDMMode;
 
-function toggleDMMode() {
+function removeDMToken() {
+    deleteCookie("dm_token");
+    dmMode = false;
+    dmUnlocked = false;
+    dmToken = "";
+    toggleDMMode(false);
+}
+systemCallbacks["nodm"] = removeDMToken;
+
+function toggleDMMode(value = null) {
+    if (value != null)
+        dmMode = !value;
     dmMode = !dmMode;
-    let color = `var(--${dmMode ? "accent" : "main"}-color)`;
-    document.getElementById("navbar-header").style.color = color;
+
+    let color = "text";
+    if (dmUnlocked) {
+        color = dmMode ? "accent" : "main";
+    }
+    let navHeader = document.getElementById("navbar-header");
+    if (navHeader)
+        navHeader.style.color = `var(--${color}-color)`;
+
     if (dmMode)
         document.body.classList.add("dm-mode");
     else
@@ -138,7 +156,8 @@ function sendConsoleCommand(str) {
     }
     let command = str.substring(0, space).trim();
     let args = str.substring(space, str.length).trim();
-    sendMessage("console", command, { args: args });
+    let dm = getCookie("dm_token") ?? "";
+    sendMessage("console", command, { args: args, dm: dm });
 }
 
 let consoleCallbacks = {};

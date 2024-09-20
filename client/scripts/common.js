@@ -3,8 +3,9 @@
 if (localStorage.lightning === undefined) localStorage.lightning = true; // default true
 if (localStorage.rain === undefined) localStorage.rain = true; // default true
 
+let loadingNavbar = null;
 if (document.getElementById("navbar") !== null) {
-    fetch("/assets/templates/navbar.html")
+    loadingNavbar = fetch("/assets/templates/navbar.html")
         .then(data => { return data.text(); })
         .then(data => { document.getElementById("navbar").innerHTML = data; })
         .then(updateViewElement);
@@ -26,6 +27,19 @@ function loadImage(path) {
         image.onload = resolve.bind(resolve, image);
         image.src = path;
     });
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2)
+        return parts.pop().split(';').shift();
+}
+function setCookie(name, value) {
+    document.cookie = `${name}=${value}`;
+}
+function deleteCookie(name) {
+    document.cookie = `${name}=; max-age=0`;
 }
 
 // Websocket
@@ -60,7 +74,7 @@ function connectToServer() {
             console.log(event);
         });
 
-        socket.addEventListener("open", (event) => {
+        socket.addEventListener("open", async (event) => {
             sendMessage("system", "connect", {
                 status: socketStatus,
                 startTime: startTime,
@@ -70,6 +84,12 @@ function connectToServer() {
             reconnectDelay = 1;
             socketStatus = "connected";
             localStorage.setItem("refreshing", false);
+
+            await loadingNavbar;
+            let dmToken = getCookie("dm_token");
+            if (dmToken != undefined) {
+                sendMessage("system", "dm", { token: dmToken });
+            }
         });
 
         socket.addEventListener("close", (event) => {
