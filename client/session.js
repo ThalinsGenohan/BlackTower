@@ -107,8 +107,8 @@ async function updateCharacter(c) {
 sessionCallbacks["char"] = msg => updateCharacter(new SessionCharacter(msg.char));
 
 const barColors = {
-    hp: "#26f50a",
-    mp: "#08f7ef",
+    hp: "#00cc00",
+    mp: "#00bbbb",
 };
 
 async function updateBar(cID, bar, current, max, potionCount) {

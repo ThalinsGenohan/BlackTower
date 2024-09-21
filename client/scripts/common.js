@@ -198,6 +198,7 @@ async function writeSmall(ctx, x, y, str) {
 
 const barBorder = loadImage('/assets/textures/bar-border.png');
 const barFill = loadImage('/assets/textures/bar-fill.png');
+const barColorBlend = "hard-light";
 
 /**
  * 
@@ -282,7 +283,7 @@ async function drawBar(ctx, x, y, width, fillValue, fillMax, fillColor, labelIma
     ctx.fillRect(fillStart, 1, fillWidth, 6);
 
     const oldGCO = ctx.globalCompositeOperation;
-    ctx.globalCompositeOperation = "luminosity";
+    ctx.globalCompositeOperation = barColorBlend;
     ctx.drawImage(fillTexture,
         0.5, 0, 0.5, 8,
         fillStart, 0, Math.min(1, fillWidth), 8
@@ -346,7 +347,7 @@ async function drawSegmentedBar(ctx, x, y, fillValue, fillMax, fillColor) {
             ctx.setTransform(oldTransform);
 
             const oldGCO = ctx.globalCompositeOperation;
-            ctx.globalCompositeOperation = "luminosity";
+            ctx.globalCompositeOperation = barColorBlend;
             ctx.drawImage(segmentFill,
                 0, 0, 11, segmentHeight,
                 currentX, 0, segmentSlicesW.middle, segmentHeight
