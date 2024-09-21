@@ -158,19 +158,12 @@ function updateViewElement() {
 // Black Tower Utilities
 
 const smallFontWidth = 5;
-const smallFontHeight = 7;
-const smallFontCount = 12;
+const smallFontHeight = 9;
 const smallFont = new Promise((resolve, reject) => {
-    let image = new Image(smallFontWidth * smallFontCount, smallFontHeight);
+    let image = new Image();
     image.onload = resolve.bind(resolve, image);
     image.src = '/assets/fonts/small-font.png';
 });
-const smallFontChars = {
-    '/': 50,
-    '+': 55,
-    '-': 60,
-    '.': 65,
-}
 
 /**
  * 
@@ -184,17 +177,13 @@ async function writeSmall(ctx, x, y, str) {
     str = str.toString();
     for (let i = 0; i < str.length; i++) {
         const c = str[i];
+        const cIndex = c.charCodeAt(0) - 32;
 
-        let charX = smallFontChars[c] ?? smallFontWidth * c;
+        let charX = (cIndex & 0xF) * smallFontWidth;
+        let charY = (cIndex >> 4) * smallFontHeight;
 
-        switch (c) {
-            case ' ':
-                xx += smallFontWidth;
-                break;
-            default:
-                ctx.drawImage(await smallFont, charX, 0, smallFontWidth, smallFontHeight, xx, y, smallFontWidth, smallFontHeight);
-                xx += smallFontWidth;
-        }
+        ctx.drawImage(await smallFont, charX, charY, smallFontWidth, smallFontHeight, xx, y, smallFontWidth, smallFontHeight);
+        xx += smallFontWidth;
     }
 }
 
