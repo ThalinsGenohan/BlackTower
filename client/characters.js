@@ -96,7 +96,7 @@ async function updateCharacterSkills(cID, data) {
     }
 }
 
-connectToServer().then(() => {
+connectingToServer.then(() => {
     sendMessage("character", "chardata");
 });
 

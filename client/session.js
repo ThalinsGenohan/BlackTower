@@ -227,7 +227,7 @@ async function updateGems(cID, gems) {
 
 }
 
-connectToServer().then(() => {
+connectingToServer.then(() => {
     sendMessage("session", "ping");
 });
 

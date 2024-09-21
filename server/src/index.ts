@@ -30,11 +30,18 @@ function getHashCode(str: string) {
 }
 const dmToken = getHashCode(process.env.DM_PASSWORD!);
 
+fs.mkdir("../logs/").catch(() => null);
+fs.rename("../logs/ips.log", "../logs/ips-old.log").catch(() => null);
+const ipLogFile = fs.open("../logs/ips.log", 'a');
+
 const app = connect();
 app.use(async (req, res, next) => {
     if (req.url && !req.url.match(/\./)) {
         let url = req.url;
-        console.log(url);
+        let ip = req.socket.remoteAddress;
+        let timeString = new Date().toISOString();
+        console.log(`[${timeString}] ${ip} : ${url}`);
+        (await ipLogFile).appendFile(`[${timeString}] ${ip} : ${url}\n`);
         if (url == "/") {
             url = "/index";
         }

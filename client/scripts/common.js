@@ -120,6 +120,8 @@ function connectToServer() {
     });
 }
 
+let connectingToServer = connectToServer();
+
 function sendMessage(category, type, data = {}) {
     let obj = { category, type, ...data };
     let json = JSON.stringify(obj);
