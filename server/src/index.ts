@@ -31,7 +31,6 @@ function getHashCode(str: string) {
 const dmToken = getHashCode(process.env.DM_PASSWORD!);
 
 let ipLogFile: fs.FileHandle;
-
 (async function () {
     await fs.rename("../logs/ips.log", "../logs/ips-old.log").catch(() => null);
     await fs.mkdir("../logs/").catch(() => null);
@@ -43,10 +42,10 @@ const app = connect();
 app.use(async (req, res, next) => {
     if (req.url && !req.url.match(/\./)) {
         let url = req.url;
-        let ip = req.socket.remoteAddress;
+        let ip = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress;
         let timeString = new Date().toISOString();
         console.log(`[${timeString}] ${ip} : ${url}`);
-        (await ipLogFile).appendFile(`[${timeString}] ${ip} : ${url}\n`);
+        ipLogFile.appendFile(`[${timeString}] ${ip} : ${url}\n`);
         if (url == "/") {
             url = "/index";
         }
