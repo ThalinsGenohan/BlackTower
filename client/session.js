@@ -95,8 +95,8 @@ async function updateCharacter(c) {
     }
 
     // TEMP
-    updateBar(cID, "hp", c.currentHP, c.maxHP, 2);
-    updateBar(cID, "mp", c.currentMP, c.maxMP, 1);
+    updateBar(cID, "hp", c.currentHP, c.maxHP, c.hpPotions, SessionCharacter.maxHPPotions);
+    updateBar(cID, "mp", c.currentMP, c.maxMP, c.mpPotions, SessionCharacter.maxMPPotions);
     updateClassMechanic(cID, 1);
     updateClassMechanic(cID, 2);
     updateGems(cID, c.gems);
@@ -111,7 +111,7 @@ const barColors = {
     mp: "#00bbbb",
 };
 
-async function updateBar(cID, bar, current, max, potionCount) {
+async function updateBar(cID, bar, current, max, potionCount, potionMax) {
     /** @type {HTMLCanvasElement} */
     let canvas = document.getElementById(`${cID}-${bar}-canvas`);
     /** @type {CanvasRenderingContext2D} */
@@ -129,7 +129,7 @@ async function updateBar(cID, bar, current, max, potionCount) {
     });
 
     // potion counter
-    drawSegmentedBar(ctx, width - 8, 9, potionCount, 3, barColors[bar]);
+    drawSegmentedBar(ctx, width - 8, 9, potionCount, potionMax, barColors[bar]);
 }
 
 function updateCharacterData(cID, key, data) {

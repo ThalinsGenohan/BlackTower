@@ -5,6 +5,8 @@ class SessionCharacter {
     static baseMagic = 5;
     static baseDefense = 5;
     static baseResistance = 5;
+    static maxHPPotions = 3;
+    static maxMPPotions = 3;
 
     /**
      * 
@@ -13,7 +15,9 @@ class SessionCharacter {
     constructor(serverCharacter) {
         this.full = serverCharacter.full;
         this.currentHP = serverCharacter.currentHP;
+        this.hpPotions = serverCharacter.hpPotions;
         this.currentMP = serverCharacter.currentMP;
+        this.mpPotions = serverCharacter.mpPotions;
         this.equippedClass = serverCharacter.equippedClass;
         this.buffs = serverCharacter.buffs;
         this.gems = serverCharacter.gems;
@@ -82,7 +86,11 @@ class SessionCharacter {
     /** @type {number} */
     currentHP;
     /** @type {number} */
+    hpPotions;
+    /** @type {number} */
     currentMP;
+    /** @type {number} */
+    mpPotions;
     /** @type {JobClass} */
     equippedClass = null;
     /** @type {{ [key: string]: Buff }} */

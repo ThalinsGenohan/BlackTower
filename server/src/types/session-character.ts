@@ -7,11 +7,15 @@ export class SessionCharacter {
     static baseMagic = 5;
     static baseDefense = 5;
     static baseResistance = 5;
+    static maxHPPotions = 3;
+    static maxMPPotions = 3;
 
     constructor(fullCharacter: Character) {
         this.full = fullCharacter;
         this.currentHP = this.maxHP;
         this.currentMP = this.maxMP;
+        this.hpPotions = SessionCharacter.maxHPPotions;
+        this.mpPotions = SessionCharacter.maxMPPotions;
     }
 
     full: Character;
@@ -61,7 +65,9 @@ export class SessionCharacter {
     get specialtyClass(): JobClass { return this.full.specialtyClass; }
 
     currentHP: number;
+    hpPotions: number;
     currentMP: number;
+    mpPotions: number;
     equippedClass: JobClass | null = null;
     buffs: { [id: string]: Buff } = {};
     gems: [(Gem | null), (Gem | null), (Gem | null), (Gem | null),
