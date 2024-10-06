@@ -109,9 +109,7 @@ let dmMode = false;
 function unlockDMMode(msg) {
     dmToken = msg.token;
     dmUnlocked = true;
-
     setCookie("dm_token", dmToken);
-
     toggleDMMode(true);
 }
 systemCallbacks["dm"] = unlockDMMode;
