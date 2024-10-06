@@ -226,6 +226,10 @@ function sendConsoleLog(ws: WebSocket, log: string) {
     sendMessage(ws, "console", "log", { str: log });
 }
 
+function broadcastConsoleLog(log: string) {
+    broadcast("console", "log", { str: log });
+}
+
 function handleCommand(ws: WebSocket, command: string, argsStr?: string) {
     if (!argsStr) {
         let comm = dmCommands.get(command);
@@ -283,6 +287,16 @@ function handleCommand(ws: WebSocket, command: string, argsStr?: string) {
     comm!(ws, args);
 }
 
+dmCommands.set("damage", (ws: WebSocket, args: string[]) => {
+    handleCommand(ws, "data", `${args[0]} currentHP -${args[1]}`);
+});
+dmCommands.set("heal", (ws: WebSocket, args: string[]) => {
+    handleCommand(ws, "data", `${args[0]} currentHP +${args[1]}`);
+});
+dmCommands.set("class", (ws: WebSocket, args: string[]) => {
+    handleCommand(ws, "data", `${args[0]} equippedClass ${args[1]}`);
+});
+
 dmCommands.set("session", (ws: WebSocket, args: Array<string>) => {
     switch (args[0]) {
     case "new":
@@ -327,7 +341,7 @@ dmCommands.set("data", (ws: WebSocket, args: Array<string>) => {
         return;
     }
     if (!args || args.length < 3) {
-        sendConsoleLog(ws, "Data command missing args: data <character> <data> <new value>");
+        sendConsoleLog(ws, "Data command missing args: data <character> <data> <value>");
         return;
     }
 
@@ -354,10 +368,13 @@ dmCommands.set("data", (ws: WebSocket, args: Array<string>) => {
         return;
     }
 
-    let data: any = args[2];
+    let data: any = args[2]!;
+    let relative: boolean = false;
     switch (typeof (current[lastLayer])) {
     case 'number':
         data = Number(data);
+        if (args[2]![0] == '+' || args[2]![0] == '-')
+            relative = true;
         break;
     case 'string':
         data = String(data);
@@ -386,7 +403,25 @@ dmCommands.set("data", (ws: WebSocket, args: Array<string>) => {
         }
         break;
     }
-    current[lastLayer] = data;
+
+    if (relative) {
+        current[lastLayer] += data;
+    } else {
+        current[lastLayer] = data;
+    }
+
+    if (typeof data == "number") {
+        let max: number = 0;
+        switch (lastLayer) {
+        case "currentHP":
+            max = character.maxHP
+            break;
+        case "currentMP":
+            max = character.maxMP
+            break;
+        }
+        current[lastLayer] = Math.max(0, Math.min(current[lastLayer], max));
+    }
 
     broadcast("session", "char", { char: character });
 });
@@ -537,6 +572,77 @@ dmCommands.set("gem", (ws: WebSocket, args: string[]) => {
     character.gems[slot] = gem;
     broadcast("session", "char", { char: character });
 });
+
+dmCommands.set("potion", (ws: WebSocket, args: string[]) => {
+    if (session == null) {
+        sendConsoleLog(ws, "Potion command can only be used when a session is active");
+        return;
+    }
+    if (!args || args.length < 2) {
+        sendConsoleLog(ws, "Potion command missing args: potion <player> <resource> [restore]");
+        return;
+    }
+
+    const cName: string = args.shift()!;
+    let character: SessionCharacter | undefined = session.characters.find(c => c.name == cName);
+    if (character == undefined) {
+        sendConsoleLog(ws, `Character '${cName}' not found`);
+        return;
+    }
+
+    let resource: string = args.shift()!.toLowerCase();
+
+    let restore: string | undefined = args.shift();
+    if (restore != undefined) {
+        let restoreCount: number = Number(restore);
+        if (restoreCount < 1) {
+            sendConsoleLog(ws, "Potion restore count must be >0");
+            return;
+        }
+
+        switch (resource) {
+        case "hp":
+            character.hpPotions += restoreCount;
+            Math.min(character.hpPotions, SessionCharacter.maxHPPotions);
+            sendConsoleLog(ws, `${cName} has gained +${restoreCount} HP potions!`);
+            break;
+        case "mp":
+            character.mpPotions += restoreCount;
+            Math.min(character.mpPotions, SessionCharacter.maxMPPotions);
+            sendConsoleLog(ws, `${cName} has gained +${restoreCount} MP potions!`);
+            break;
+        default:
+            sendConsoleLog(ws, `Unknown potions type: '${resource}`);
+            return;
+        }
+        broadcast("session", "char", { char: character });
+        return;
+    }
+
+    switch (resource) {
+    case "hp":
+        if (character.hpPotions < 1) {
+            sendConsoleLog(ws, `${cName} has no more HP potions!`);
+            break;
+        }
+        character.currentHP = character.maxHP;
+        character.hpPotions--;
+        break;
+    case "mp":
+        if (character.mpPotions < 1) {
+            sendConsoleLog(ws, `${cName} has no more MP potions!`);
+            break;
+        }
+        character.currentMP = character.maxMP;
+        character.mpPotions--;
+        break;
+    default:
+        sendConsoleLog(ws, `Unknown potions type: '${resource}`);
+        return;
+    }
+    sendConsoleLog(ws, `${cName} has used a ${resource.toUpperCase()} potion`);
+    broadcast("session", "char", { char: character });
+})
 
 function ActivateBuff(character: SessionCharacter, actions: { stat: string, num: number }[]) {
     for (let action of actions) {
