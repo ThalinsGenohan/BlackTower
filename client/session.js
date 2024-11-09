@@ -36,6 +36,97 @@ async function addSkillEntry(charID, jobClass, skillID) {
     return element;
 }
 
+const newBarFillTexture = loadImage("assets/textures/new-bar-fill.png");
+
+async function drawPlayerHUD(charID) {
+    let hud = document.getElementById("hud");
+
+    let canvas = document.getElementById(`${charID}-hud`);
+    if (canvas == null) {
+        canvas = document.createElement("canvas");
+        canvas.classList.add("hud-player");
+        canvas.id = `${charID}-hud`;
+
+        hud.appendChild(canvas);
+    }
+    let ctx = canvas.getContext("2d");
+
+    let character = characters[charID];
+    if (!character)
+        return;
+
+    const width = canvas.width = 92;
+    const height = canvas.height = 61;
+    ctx.clearRect(0, 0, width, height);
+    ctx.imageSmoothingEnabled = false;
+
+    // draw frame
+    ctx.drawImage(await loadImage("assets/textures/portrait-frame.png"), 0, 0);
+
+    // draw background
+    ctx.drawImage(await loadImage("assets/textures/portrait-background.png"), 0, 0);
+    // TODO: adjust background color
+
+    // TODO: draw portrait
+
+    const barXs = { hp: 24, mp: 28 };
+    const barYs = { hp: 44, mp: 52 };
+    const barRowStarts = [20, 21, 21, 4, 2, 2, 3];
+    const barRowWidths = [38, 38, 38, 56, 58, 59, 58];
+    const barRowHeight = 7;
+
+    // draw HP bar
+    const values = { hp: character.currentHP, mp: character.currentMP };
+    const maxes = { hp: character.maxHP, mp: character.maxMP };
+    for (const key in values) {
+        if (!Object.prototype.hasOwnProperty.call(values, key)) {
+            continue;
+        }
+        const v = values[key];
+        const m = maxes[key];
+        const p = v / m;
+
+        // apply texture
+        ctx.drawImage(await newBarFillTexture,
+            0, 0, 59, 7,
+            barXs[key] + 2, barYs[key], 59, 7
+        );
+
+        // apply color
+        const oldGCO = ctx.globalCompositeOperation;
+        for (let i = 0; i < barRowHeight; i++) {
+            const fullWidth = 58;
+            const fillWidth = fullWidth * p;
+            const start = barRowStarts[i];
+
+            const f = fullWidth - start + i / 2 + 0.5;
+            const w = fillWidth - start + i / 2 + 0.5;
+            // fill color
+            if (w > 0) {
+                ctx.fillStyle = barColors[key];
+                ctx.globalCompositeOperation = "overlay";
+                ctx.fillRect(barXs[key] + start, barYs[key] + i, w, 1);
+            }
+
+            // empty color
+            if (f - w > 0) {
+                ctx.globalCompositeOperation = "source-over";
+                ctx.fillStyle = "#494949";
+                ctx.fillRect(barXs[key] + start + w, barYs[key] + i, f - w, 1);
+            }
+        }
+        ctx.globalCompositeOperation = oldGCO;
+
+        // write numbers
+        let numStr = `${' '.repeat(3 - v.toString().length)}${v}/${' '.repeat(3 - m.toString().length)}${m}`
+        writeSmall(ctx, barXs[key] + barRowWidths[3] - 35, barYs[key] + 2, numStr);
+    }
+
+    // TODO: buffs
+}
+
+async function updateNewBar() { }
+
 /** @type {{ [charID: string]: SessionCharacter }} */
 let characters = {};
 
@@ -101,6 +192,8 @@ async function updateCharacter(c) {
     updateClassMechanic(cID, 2);
     updateGems(cID, c.gems);
     updateBuffs(cID, c.buffs);
+
+    drawPlayerHUD(cID);
 
     fixCenterText();
 }

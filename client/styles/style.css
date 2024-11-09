@@ -312,3 +312,9 @@ body:not(.dm-mode) .dm-only {
 .accent-text {
     color: var(--accent-color);
 }
+
+.hud-player {
+    width: 184px;
+    height: 122px;
+    image-rendering: pixelated;
+}

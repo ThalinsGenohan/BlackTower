@@ -45,6 +45,7 @@
     padding: 0;
     width: 161px;
     height: 48px;
+    transform: perspective(0);
 }
 
 .name {
