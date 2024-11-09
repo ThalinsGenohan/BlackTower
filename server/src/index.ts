@@ -288,13 +288,13 @@ function handleCommand(ws: WebSocket, command: string, argsStr?: string) {
 }
 
 dmCommands.set("damage", (ws: WebSocket, args: string[]) => {
-    handleCommand(ws, "data", `${args[0]} currentHP -${args[1]}`);
+    handleCommand(ws, "data", `"${args[0]}" currentHP -${args[1]}`);
 });
 dmCommands.set("heal", (ws: WebSocket, args: string[]) => {
-    handleCommand(ws, "data", `${args[0]} currentHP +${args[1]}`);
+    handleCommand(ws, "data", `"${args[0]}" currentHP +${args[1]}`);
 });
 dmCommands.set("class", (ws: WebSocket, args: string[]) => {
-    handleCommand(ws, "data", `${args[0]} equippedClass ${args[1]}`);
+    handleCommand(ws, "data", `"${args[0]}" equippedClass ${args[1]}`);
 });
 
 dmCommands.set("session", (ws: WebSocket, args: Array<string>) => {
@@ -373,6 +373,10 @@ dmCommands.set("data", (ws: WebSocket, args: Array<string>) => {
     switch (typeof (current[lastLayer])) {
     case 'number':
         data = Number(data);
+        if (isNaN(data)) {
+            sendConsoleLog(ws, `'${args[2]}' is not a valid number!`);
+            return;
+        }
         if (args[2]![0] == '+' || args[2]![0] == '-')
             relative = true;
         break;
